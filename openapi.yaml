@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.2"
+  version: "1.0.0-alpha.3"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -1819,7 +1819,7 @@ paths:
                         - required:
                           - id
                           - name
-                  example: {"id": 28, "leader": {"id": 8888, "name": "张三"}, "members": [{"id": 5324, "name": "李四"}, {"id": 5678, "name": "王五"}], "topics": [{"id": 257, "name": "领域模型与模块"}]}
+                  example: {"id": 28, "leader": {"id": 8888, "name": "张三"}, "members": [{"id": 5324, "name": "李四"}, {"id": 5678, "name": "王五"}], "topics": [{"id": 257, "name": "领域模型与模块"}], "report": ""}
         '400':
           description: 错误的ID格式
         '404':
@@ -1876,12 +1876,12 @@ paths:
                             type: string
                             enum: 
                             - student
-              example: {"leader": {"id": 5678}, "members": [{"id": 8888}, {"id": 5324}]}
+              example: {"leader": {"id": 5678}, "members": [{"id": 8888}, {"id": 5324}], "report": "/upload/report/54123.pdf"}
       responses:
         '204':
           description: 成功
         '400':
-          description: 错误的ID格式
+          description: 错误的ID格式、指定了不存在的报告URL等
         '403':
           description: 权限不足（不是该小组的组长）
         '404':
@@ -1955,7 +1955,38 @@ paths:
                     format: url
                     example: "/roster/周三12班.xlsx"
         '400':
-          description: 图片大小不符合要求、图片格式不正确、不是有效的图片
+          description: 文件大小不符合要求、名单文件格式不正确、不是有效的文件
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/upload/report':
+    post:
+      tags: 
+      - upload
+      summary: 上传小组报告
+      operationId: uploadReport
+      requestBody:
+        required: true
+        content:
+          'application/pdf':
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: 服务器上的学生名单文件URL
+          content:
+            application/json:
+              schema:
+                properties: 
+                  url:
+                    type: string
+                    format: url
+                    example: "/upload/report/124324.pdf"
+        '400':
+          description: PDF大小不符合要求、报告文件格式不正确、不是有效的PDF
       security:
         - http_pwd: []
         - mp_code: []
@@ -2336,6 +2367,10 @@ components:
             - required:
               - id
               - name
+        report:
+          type: string
+          description: 小组的报告
+          format: url
     School:
       type: object
       properties:
