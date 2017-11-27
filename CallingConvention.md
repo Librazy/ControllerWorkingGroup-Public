@@ -71,7 +71,7 @@
 
 * 退课的班级不存在（即不存在ID为452的班级）
 
-    ``` text
+    ``` plain
     DELETE /class/452/student/7654
     ```
 
@@ -83,7 +83,7 @@
 
 * 存在ID为452的班级且存在ID为7654的学生，但不存在这个选课关系
 
-    ``` text
+    ``` plain
     DELETE /class/452/student/7654
     ```
 
@@ -103,7 +103,7 @@
 
 已选过同课程的课，再次选择其他班级
 
-``` text
+``` plain
 POST /class/452/student
 ```
 
@@ -175,7 +175,7 @@ J2EE 实现视每个微信 UnionId 首次登入为注册，注册后的绑定信
 
 对于需要登录的每个 API 请求，均必须将 JWT 放入 HTTP 请求的 `Authorization` 头中
 
-``` http
+``` plain
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI3NTciLCJ0eXBlIjoic3R1ZGVudCJ9.XkD1G0YE-PmBGUmndPv1VFXHckD7lrIQ8wMjJqxBqdQ
 ```
 

@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.4"
+  version: "1.0.0-alpha.4.1"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -279,7 +279,7 @@ paths:
                 - name
                 - province
                 - city
-            example: {"name": "厦门市人民公园", "province": "福建", "city": "厦门"}
+              example: {"name": "厦门市人民公园", "province": "福建", "city": "厦门"}
       responses:
         '201':
           description: 创建成功，返回学校的ID
@@ -319,9 +319,10 @@ paths:
                     - id
                     - name
                     - numClass
-                    - credit
-                    - lessonsPerWeek
-                example: [{"id": 1, "name": "OOAD", "numClass": 6},  {"id": 2, "name": "J2EE", "numClass": 4, }]
+                    - numStudent
+                    - startTime
+                    - endTime
+                example: [{"id": 1, "name": "OOAD", "numClass": 3, "numStudent": 60, "startTime": "2017-9-1", "endTime": "2018-1-1"},  {"id": 2, "name": "J2EE", "numClass": 1, "numStudent": 60, "startTime": "2017-9-1", "endTime": "2018-1-1"}]
       security:
         - http_pwd: []
         - mp_code: []
@@ -717,18 +718,16 @@ paths:
       - name: numBeginWith
         in: query
         description: 学生的学号开头
-        required: true
         schema:
           type: string
       - name: nameBeginWith
         in: query
         description: 学生的姓名开头
-        required: true
         schema:
           type: string
       responses:
         '200':
-          description: 满足条件的学生列表 TODO：是否包含班级分组信息
+          description: 满足条件的学生列表
           content:
             application/json:
               schema:
@@ -748,6 +747,8 @@ paths:
                 example: [{"id": 233, "name": "张三"}, {"id": 245, "name": "张八"}]
         '400':
           description: 错误的ID格式
+        '404':
+          description: 未找到班级
       security:
         - http_pwd: []
         - mp_code: []
@@ -1491,10 +1492,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Topic'
-                required:
-                - id
-                example: {"id": 257}
+                allOf:
+                - $ref: '#/components/schemas/Topic'
+                - required:
+                  - id
+                  example: {"id": 257}
         '403':
           description: 用户权限不足（无法在他人讨论课创建话题、学生无法创建话题）
       security:
@@ -2172,9 +2174,11 @@ components:
           description: 课程的名称
           type: string
         numClass:
+          readOnly: true
           description: 班级数量
           type: integer
         numStudent:
+          readOnly: true
           description: 学生数量
           type: integer
         startTime:
