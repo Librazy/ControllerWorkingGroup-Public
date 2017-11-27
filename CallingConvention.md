@@ -3,6 +3,49 @@
 以下关键词 MUST 必须、MUST NOT 禁止
 、REQUIRED 必需的、SHALL 应当、SHALL NOT 应当不、SHOULD 应该、SHOULD NOT 不应该、 RECOMMENDED 推荐、MAY 可以、OPTIONAL 可选的 依照 [RFC 2119](https://tools.ietf.org/html/rfc2119) 的叙述解读。
 
+## 请求
+
+> 关于 MIME 类型：[MIME types - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types)  
+> 常见 MIME 类型列表：[Incomplete list of MIME types - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types)
+
+除上传文件外，所有的请求体的 MIME 类型必须是 `application/json` ，并且为合法的 JSON 字符串且满足[对应 API 的 schema](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/) 。
+
+例：
+
+设 `newSchool` 为待新增的学校的 JS 对象
+
+* jQuery请求新增学校接口
+
+    ``` javascript
+    // headerObj 包含一些请求 API 必需的字段，下同。参见下文 [API 鉴权]
+    $.ajax({
+        url: '/school',
+        type: 'POST',
+        headers: headerObj,
+        contentType: 'application/json',
+        data: JSON.stringify(newSchool),
+        success: function(data) {
+            // 获得新学校的ID
+        }
+    });
+    ```
+
+* 微信小程序请求新增学校接口
+
+    ``` javascript
+    // headerObj['content-type'] == 'application/json'
+    // 小程序的默认 content-type 即为 application/json
+    wx.request({
+        url: '/school',
+        header: headerObj,
+        method: "POST",
+        data: newSchool
+        success: function (data) {
+            // 获得新学校的ID
+        }
+    });
+    ```
+
 ## 响应
 
 ### `20x`
@@ -135,7 +178,7 @@ J2EE 实现视每个微信 UnionId 首次登入为注册，注册后的绑定信
 
 ### 微信小程序登录
 
-微信小程序登录的参考详见 [开放接口·小程序](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
+> 微信小程序登录的参考详见 [开放接口·小程序](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
 
 1. 小程序调用 `wx.login()` 获取 code
 2. 小程序请求 `GET /signin?state=MiniProgram&code=%JSCODE%`，其中 `%JSCODE%` 为上一步获取的 code
@@ -149,7 +192,7 @@ J2EE 实现视每个微信 UnionId 首次登入为注册，注册后的绑定信
 
 ### 微信扫码登录
 
-微信扫码登录的参考详见 [资源中心·微信开放平台](https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN)
+> 微信扫码登录的参考详见 [资源中心·微信开放平台](https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN)
 
 1. 服务器端使用服务端密钥签名当前时间生成 state
 2. 网页使用上一步生成的 state 调用 `wxLogin.js` 显示二维码

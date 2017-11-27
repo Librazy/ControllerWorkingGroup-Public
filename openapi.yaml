@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.4.1"
+  version: "1.0.0-alpha.5"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -239,8 +239,25 @@ paths:
     get:
       tags:
         - school
-      summary: 获取学校列表
+      summary: 获取学校列表（按照地区、名称查找学校）
+      description: 三个参数需要依次指定，即出现高级查找条件则必须有完整的低级查找条件（例：按城市查找必须给出完整的省份）
       operationId: getSchools
+      parameters:
+      - name: provinceBeginWith
+        in: query
+        description: 学校的省份开头
+        schema:
+          type: string
+      - name: cityBeginWith
+        in: query
+        description: 学校的城市开头
+        schema:
+          type: string
+      - name: nameBeginWith
+        in: query
+        description: 学校的名称开头
+        schema:
+          type: string
       responses:
         '200':
           description: 成功
@@ -345,7 +362,7 @@ paths:
                 - proportions
                 - startTime
                 - endTime
-              example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2017-1-31", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+              example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-31", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
       responses:
         '201':
           description: 创建成功，返回课程的ID
@@ -395,6 +412,37 @@ paths:
           description: 错误的ID格式
         '404':
           description: 未找到课程
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+    put:
+      tags:
+        - course
+      summary: 修改课程
+      operationId: updateCourse
+      parameters:
+      - name: courseId
+        in: path
+        description: 需修改课程的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Course'
+              - example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-1", "proportions": {"report": 70, "presentation": 30, "3": 20, "4": 60, "5": 20 }}
+      responses:
+        '204':
+          description: 修改成功
+        '403':
+          description: 用户权限不足（学生无法修改课程、无法修改他人课程）
       security:
         - http_pwd: []
         - mp_code: []
@@ -1305,120 +1353,6 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
-  '/seminar/{seminarId}/grade':
-    get:
-      tags:
-        - seminar
-      summary: 按ID获取与用户相关的讨论课成绩
-      operationId: getGradeBySeminarId
-      parameters:
-      - name: seminarId
-        in: path
-        description: 需获取成绩的讨论课的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        '200':
-          description: 成功
-          content:
-            application/json:
-              schema:
-                allOf:
-                - $ref: '#/components/schemas/SeminarGrade'
-                example: {"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 5}
-        '400':
-          description: 错误的ID格式
-        '404':
-          description: 未找到讨论课
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-    put:
-      tags:
-        - seminar
-      summary: 确定各小组的打分
-      operationId: finalGradeBySeminarId
-      parameters:
-      - name: seminarId
-        in: path
-        description: 需提交成绩的讨论课的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              uniqueItems: true
-              items:
-                $ref: '#/components/schemas/SeminarGrade'
-              example: [{"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 4}, {"groupId": 84, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 4}], "reportGrade": 4}, {"groupId": 86, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 2}], "reportGrade": 5}]
-      responses:
-        '204':
-          description: 成功
-        '400':
-          description: 错误的ID格式
-        '403':
-          description: 权限不足（学生无法提交成绩、无法修改他人讨论课）
-        '404':
-          description: 未找到讨论课
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/seminar/{seminarId}/grade/{studentId}':
-    put:
-      tags:
-        - seminar
-      summary: 提交对其他小组的打分
-      operationId: submitGradeBySeminarId
-      parameters:
-      - name: seminarId
-        in: path
-        description: 提交成绩的讨论课的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: studentId
-        in: path
-        description: 提交成绩的学生的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              uniqueItems: true
-              items:
-                $ref: '#/components/schemas/SeminarGrade'
-              example: [{"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}]}, {"groupId": 84, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 5}]}, {"groupId": 86, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 2}]}]
-      responses:
-        '204':
-          description: 成功
-        '400':
-          description: 错误的ID格式、对无权评分的小组评分
-        '404':
-          description: 未找到讨论课
-        '409':
-          description: 已评分
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
   '/seminar/{seminarId}/topic':
     get:
       tags:
@@ -1716,19 +1650,13 @@ paths:
     get:
       tags:
         - group
-      summary: 按讨论课ID查找小组（查询学生所在分组）
+      summary: 按讨论课ID查找小组
       operationId: getGroupBySeminarId
       parameters:
       - name: seminarId
         in: path
         description: 需获取讨论课的ID
         required: true
-        schema:
-          type: integer
-          format: int64
-      - name: studentId
-        in: query
-        description: 查询的学生ID
         schema:
           type: integer
           format: int64
@@ -1765,6 +1693,7 @@ paths:
       tags:
         - group
       summary: 按小组ID获取小组详情
+      description: 小组选择的话题和小组的得分可以通过 `GET /group/{groupId}?embedTopics=true&embedGrade=true`获取，但不能通过对应的 `PUT /group/{groupId}` 设置
       operationId: getGroupById
       parameters:
       - name: groupId
@@ -1774,6 +1703,16 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: embedTopics
+        in: query
+        description: 是否包含小组选择的话题
+        schema:
+          type: boolean
+      - name: embedGrade
+        in: query
+        description: 是否包含小组的成绩
+        schema:
+          type: boolean
       responses:
         '200':
           description: 小组详情
@@ -1891,6 +1830,116 @@ paths:
           description: 权限不足（不是该小组的组长）
         '404':
           description: 未找到小组
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/grade':
+    get:
+      tags:
+        - group
+      summary: 按ID获取小组的讨论课成绩
+      operationId: getGradeByGroupId
+      parameters:
+      - name: groupId
+        in: path
+        description: 需获取成绩的小组ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/SeminarGrade'
+                - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": null}
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到小组
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+    put:
+      tags:
+        - group
+      summary: 按ID设置小组的成绩
+      operationId: finalGradeByGroupId
+      parameters:
+      - name: groupId
+        in: path
+        description: 需设置成绩的小组ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SeminarGrade'
+              - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 4}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式
+        '403':
+          description: 权限不足（学生无法设置成绩、无法修改他人班级的小组）
+        '404':
+          description: 未找到小组
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/grade/{studentId}':
+    put:
+      tags:
+        - group
+      summary: 提交对其他小组的打分
+      operationId: submitGradeByGroupId
+      parameters:
+      - name: groupId
+        in: path
+        description: 被打分的小组的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: studentId
+        in: path
+        description: 打分的学生的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SeminarGrade'
+              - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}]}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、对无权评分的小组评分
+        '404':
+          description: 未找到小组
+        '409':
+          description: 已评分，不能重复评分
       security:
         - http_pwd: []
         - mp_code: []
@@ -2271,10 +2320,6 @@ components:
     SeminarGrade:
       type: object
       properties:
-        groupId:
-          description: 分数所属小组的ID
-          type: integer
-          format: int64
         presentationGrade:
           description: 展示得分
           type: array
@@ -2387,6 +2432,9 @@ components:
           type: string
           description: 小组的报告
           format: url
+        grade:
+          readOnly: true
+          $ref: '#/components/schemas/SeminarGrade'
     School:
       type: object
       properties:
