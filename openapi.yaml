@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.3"
+  version: "1.0.0-alpha.4"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -1324,11 +1324,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                uniqueItems: true
-                items:
-                  $ref: '#/components/schemas/SeminarGrade'
-                example: [{"groupId": 62, "presentationGrade": 4, "reportGrade": 5}]
+                allOf:
+                - $ref: '#/components/schemas/SeminarGrade'
+                example: {"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 5}
         '400':
           description: 错误的ID格式
         '404':
@@ -1360,7 +1358,7 @@ paths:
               uniqueItems: true
               items:
                 $ref: '#/components/schemas/SeminarGrade'
-              example: [{"groupId": 62, "presentationGrade": 4, "reportGrade": 4}, {"groupId": 84, "presentationGrade": 5, "reportGrade": 4}, {"groupId": 86, "presentationGrade": 5, "reportGrade": 5}]
+              example: [{"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 4}, {"groupId": 84, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 4}], "reportGrade": 4}, {"groupId": 86, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 2}], "reportGrade": 5}]
       responses:
         '204':
           description: 成功
@@ -1405,12 +1403,12 @@ paths:
               uniqueItems: true
               items:
                 $ref: '#/components/schemas/SeminarGrade'
-              example: [{"groupId": 62, "presentationGrade": 4}, {"groupId": 84, "presentationGrade": 5}, {"groupId": 86, "presentationGrade": 5}]
+              example: [{"groupId": 62, "presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}]}, {"groupId": 84, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 5}]}, {"groupId": 86, "presentationGrade": [{"topicId": 257, "grade": 5}, {"topicId": 258, "grade": 2}]}]
       responses:
         '204':
           description: 成功
         '400':
-          description: 错误的ID格式
+          description: 错误的ID格式、对无权评分的小组评分
         '404':
           description: 未找到讨论课
         '409':
@@ -1732,9 +1730,14 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: gradeable
+        in: query
+        description: 仅返回当前用户可打分的小组
+        schema:
+          type: boolean
       responses:
         '200':
-          description: 讨论课详情
+          description: 满足条件的小组列表
           content:
             application/json:
               schema:
@@ -2270,10 +2273,19 @@ components:
           format: int64
         presentationGrade:
           description: 展示得分
-          type: integer
-          format: char
-          minimum: 1
-          maximum: 5
+          type: array
+          items: 
+            properties:
+              topicId: 
+                description: 分数所属话题的ID
+                type: integer
+                format: int64
+              grade:
+                description: 本话题展示得分
+                type: integer
+                format: char
+                minimum: 1
+                maximum: 5
         reportGrade:
           description: 报告得分
           type: integer
