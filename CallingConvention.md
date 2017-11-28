@@ -325,26 +325,44 @@ wx.request({
 
 #### JWT Payload
 
-JWT Payload 中必须包含用户ID `id`、 用户类型 `type` 和过期时间 `sub` 三个字段。具体实现可以添加其他需要的字段，但禁止包含可能影响系统安全或用户数据安全的未加密信息。
+JWT Payload 中必须包含用户ID `id`、 用户类型 `type` 和过期时间 `sub` 三个字段。具体实现可以添加其他需要的字段，但禁止包含可能影响系统安全或用户数据安全的未加密信息，如微信的 `encryptedData`、 `openid`、`unionid`、`access_token`、`refresh_token` ，用户的密码等等。
 
-例如
+例:
 
-``` javascript
-{
-  "id": "2757",
-  "type": "student",
-  "exp": 1511700699
-}
-```
+* 基本的 Payload
 
-``` javascript
-{
-  "id": "2757",
-  "type": "student",
-  "name": "赖博阳"
-  "exp": 1511700699
-}
-```
+    ``` javascript
+    {
+    "id": "2757",
+    "type": "student",
+    "exp": 1511700699
+    }
+    ```
+
+* 添加了名称字段的 Payload
+
+    ``` javascript
+    {
+    "id": "2757",
+    "type": "student",
+    "name": "赖博阳",
+    "exp": 1511700699
+    }
+    ```
+
+* 添加了名称以及加密后的 session_key 的 Payload
+
+    ``` javascript
+    {
+    "id": "2757",
+    "type": "student",
+    "name": "赖博阳",
+    "sk_aes_ecb": "IFQvdz3Q805NSAlZIedVcw=="
+    "exp": 1511700699
+    }
+    ```
+
+> 禁止包含可能影响系统安全或用户数据安全的未加密信息，如微信的 `encryptedData`、 `openid`、`unionid`、`access_token`、`refresh_token` ，用户的密码等等。如果需要将此类信息保存到客户端，必须用 `AES_128_ECB` 或更高安全性的加密算法，并且妥善保存服务端密钥。
 
 #### JWT Signature
 
