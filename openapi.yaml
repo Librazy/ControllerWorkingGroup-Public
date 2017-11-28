@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.5"
+  version: "1.0.0-alpha.5.1"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -239,18 +239,13 @@ paths:
     get:
       tags:
         - school
-      summary: 获取学校列表（按照地区、名称查找学校）
-      description: 三个参数需要依次指定，即出现高级查找条件则必须有完整的低级查找条件（例：按城市查找必须给出完整的省份）
+      summary: 获取学校列表（按照城市、名称查找学校）
+      description: 两个参数需要依次指定，按名称开头查询必须给出城市
       operationId: getSchools
       parameters:
-      - name: provinceBeginWith
+      - name: city
         in: query
-        description: 学校的省份开头
-        schema:
-          type: string
-      - name: cityBeginWith
-        in: query
-        description: 学校的城市开头
+        description: 学校的城市
         schema:
           type: string
       - name: nameBeginWith
@@ -1400,7 +1395,7 @@ paths:
       summary: 在指定ID的讨论课创建话题
       operationId: createTopicBySeminarId
       parameters:
-      - name: courseId
+      - name: topicId
         in: path
         description: 待创建话题的讨论课的ID
         required: true
@@ -1665,6 +1660,12 @@ paths:
         description: 仅返回当前用户可打分的小组
         schema:
           type: boolean
+      - name: classId
+        in: query
+        description: 仅返回此班级的小组
+        schema:
+          type: integer
+          format: int64
       responses:
         '200':
           description: 满足条件的小组列表
