@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-alpha.5.1"
+  version: "1.0.0-beta.1"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -787,7 +787,7 @@ paths:
                         type: string
                         enum: 
                         - student
-                example: [{"id": 233, "name": "张三"}, {"id": 245, "name": "张八"}]
+                example: [{"id": 233, "name": "张三", "number": 24320152202333}, {"id": 245, "name": "张八", "number": 24320152202334}]
         '400':
           description: 错误的ID格式
         '404':
@@ -1597,6 +1597,14 @@ paths:
       responses:
         '201':
           description: 成功
+          content:
+            application/json:
+              schema:
+                properties: 
+                  url:
+                    type: string
+                    format: url
+                    example: "/topic/23/group/27"
         '400':
           description: 错误的ID格式或话题已满
         '403':
@@ -1663,6 +1671,12 @@ paths:
       - name: classId
         in: query
         description: 仅返回此班级的小组
+        schema:
+          type: integer
+          format: int64
+      - name: include
+        in: query
+        description: 仅返回包含此学生的小组
         schema:
           type: integer
           format: int64
@@ -1858,7 +1872,7 @@ paths:
               schema:
                 allOf:
                 - $ref: '#/components/schemas/SeminarGrade'
-                - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": null}
+                - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 3, "grade": 4}
         '400':
           description: 错误的ID格式
         '404':
@@ -2031,7 +2045,7 @@ paths:
               format: binary
       responses:
         '201':
-          description: 服务器上的学生名单文件URL
+          description: 服务器上的报告PDF文件URL
           content:
             application/json:
               schema:
@@ -2338,6 +2352,12 @@ components:
                 maximum: 5
         reportGrade:
           description: 报告得分
+          type: integer
+          format: char
+          minimum: 1
+          maximum: 5
+        grade:
+          description: 最终得分
           type: integer
           format: char
           minimum: 1
