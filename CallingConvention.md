@@ -14,7 +14,20 @@
 
 设 `newSchool` 为待新增的学校的 JS 对象
 
-* jQuery请求新增学校接口
+* 原生 Javascript 请求新增学校接口
+
+    ``` javascript
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/school', true);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    xhr.send(JSON.stringify(newSchool));
+
+    xhr.onloadend = function () {
+        // 获得新学校的ID
+    };
+    ```
+
+* jQuery 请求新增学校接口
 
     ``` javascript
     // headerObj 包含一些请求 API 必需的字段，下同。参见下文 [API 鉴权]
@@ -159,6 +172,29 @@ POST /class/452/student
 ## 登录与鉴权
 
 本应用的登录有密码登录、微信小程序登录、微信扫码登录三种方式，三种方式统一采用 JWT 管理用户登录状态。
+
+### 为什么采用 Json Web Token
+
+因为**小程序没有 Cookie**
+
+用户登录较为常见的一种思路即为在 Cookie 中保存当前用户的 Session ID ，但在小程序中并没有 Cookie 这一概念，取而代之的是一系列数据缓存 API 。而浏览器中也有对应的数据存储（ localStorage 等）。
+
+而在不使用 Cookie 的登录/鉴权方法中，最适合的的选择就是 **Json Web Token** 。
+
+并且， **JWT 在 Spring 、 ASP.Net 、 小程序下有大量的现成实现** 。
+
+### 什么是 Json Web Token
+
+> http://www.jianshu.com/p/576dbf44b2ae
+
+简单来说，就是你用一些方式向服务器证明你是你，服务器发一个证书证明你是你，以后每次服务器需要知道你是谁的时候就出示你是你的证书就好了。 JWT 就是这样一个证书。
+
+### 有其他选择吗
+
+有，但是
+
+* 无法形成统一标准，可能导致各小组的模块无法配合
+* 实现不会比 JWT 简单
 
 ### 注册
 
