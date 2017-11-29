@@ -7,7 +7,7 @@
 1. home.html
     ![home.html](images/home.html.png)
     * `登录.onclick`：  
-        `POST /signin`
+        `POST /signin`  
         请求数据：  
         ``` javascript
         {
@@ -538,29 +538,21 @@
         ``` javascript
         {
             "id": 28,
-            "name": "1-A-1"
             "leader": {
                 "id": 8888,
                 "name": "小红"
             },
-            "topics": [
+            "members": [
                 {
-                    "id": 257,
-                    "no": "A",
-                    "name": "领域模型与模块"
+                    "id": 5324,
+                    "name": "李四"
+                },
+                {
+                    "id": 5678,
+                    "name": "王五"
                 }
             ],
             "report": "/report/xxxxx.pdf"
-            "grade": {
-                presentationGrade: [
-                    {
-                        "topicId": 257,
-                        "grade": 5
-                    }
-                ],
-                reportGrade: 5,
-                totalGrade: 5
-            }
         }
         ```
 19. 预览报告并打分：
@@ -577,17 +569,17 @@
                 "id": 8888,
                 "name": "小红"
             },
+            "members": [
+                {
+                    "id": 5324,
+                    "name": "李四"
+                },
+                {
+                    "id": 5678,
+                    "name": "王五"
+                }
+            ],
             "report": "/report/xxxxx.pdf"
-            "grade": {
-                presentationGrade: [
-                    {
-                        "topicId": 257,
-                        "grade": 5
-                    }
-                ],
-                reportGrade: 5,
-                totalGrade: 5
-            }
         }
         ```
         `GET /seminar/{seminarId}/topic`  
@@ -814,10 +806,10 @@
         ```
 7. 讨论课（随机分组）
     ![Student--课程内页-讨论课（随机分组）](images/Student--课程内页-讨论课（随机分组）.png)
-    * `window.onload`：
+    * `window.onload`：  
         `GET /seminar/{seminarId}`  
         请求数据：无  
-        响应数据：包含讨论课相关信息的JSON，如  
+        响应数据：包含讨论课相关信息的JSON  
         ``` javascript
         {
             "id": 32,
@@ -828,7 +820,17 @@
             "endTime": "2017-10-24"
         }
         ```  
+        `GET /seminar/{seminarId}/group?include={studentId}`  
+        请求数据：无  
+        响应数据：学生所在的组的ID  
+        ``` javascript
+        [{
+            "id": 28
+        }]
+        ```
         `GET /group/{groupId}?embedTopics=true`  
+        请求数据：无  
+        响应数据：小组详情  
         ``` javascript
         {
             "id": 28,
@@ -871,7 +873,7 @@
         ```
 8. 讨论课（固定分组）
     ![Student--课程内页-讨论课（固定分组）](images/Student--课程内页-讨论课（固定分组）.png)
-    * `window.onload`：
+    * `window.onload`：  
         `GET /seminar/{seminarId}`  
         请求数据：无  
         响应数据：包含讨论课相关信息的JSON，如  
@@ -886,7 +888,7 @@
         }
         ```  
         `GET /seminar/{seminarId}/topic`  
-    * `选择话题.onclick`：
+    * `选择话题.onclick`：  
         `POST /topic/{topicId}/group`  
         请求数据：
         ``` javascript
@@ -894,7 +896,12 @@
           "id": 27
         }
         ```
-      响应数据：HTTP 201
+        响应数据：HTTP 201
+        ``` javascript
+        {
+            "url": "/topic/23/group/27"
+        }
+        ```
     ![Student--课程内页-讨论课（固定分组）-上传报告](images/Student--课程内页-讨论课（固定分组）-上传报告.png)
     * `上传报告.提交.onclick`  
         `POST /upload/report`  
@@ -1319,7 +1326,7 @@
         ]
         ```
         对于展开的小组：  
-        `GET /group/{groupId}`  
+        `GET /group/{groupId}?embedTopics=true`  
         请求数据:无  
         响应数据:  
         ``` javascript
@@ -1611,7 +1618,7 @@
             "id": 28
         }]
         ```  
-        `GET /group/{groupId}`
+        `GET /group/{groupId}?embedTopics=true`
         请求数据：无  
         响应数据：小组详情  
         ``` javascript
@@ -1674,7 +1681,7 @@
             }
         ]
         ```  
-    ![FixedGroupChooseTopicUI1](images/FixedGroupChooseTopicUI1.png)  
+    ![FixedGroupChooseTopicUI2](images/FixedGroupChooseTopicUI2.png)  
     * 选择话题 `POST /topic/{topicId}/group`
         请求数据：  
         ``` javascript
@@ -1690,7 +1697,20 @@
         ```
 5. 打分（GradePresentationUI、GradePresentationEndUI）  
     ![GradePresentationUI](images/GradePresentationUI.png)  
-    * 打分 `PUT /group/{groupId}/grade/{studentId}`  
+    `GET /seminar/{seminarId}/group?gradeable={true}`  
+    请求数据：无  
+    响应数据：学生可打分的组的列表  
+    ``` javascript
+    [
+        {
+            "id": 27
+        },
+        {
+            "id": 29
+        }
+    ]
+    ```
+    打分 `PUT /group/{groupId}/grade/{studentId}`  
     请求数据：包含分数的JSON  
     ``` javascript
     {
@@ -1709,35 +1729,41 @@
     响应数据：HTTP 204  
 6. RandomGroupUI：  
     ![RandomGroupUI](images/RandomGroupUI.png)  
-    `GET /group/{groupId}`  
+    `GET /seminar/{seminarId}/group?include={studentId}`  
     请求数据：无  
-    响应数据：分组名单  
-    ```javascript
+    响应数据：学生所在的组的ID  
+    ``` javascript
+    [{
+        "id": 28
+    }]
+    ```
+    `GET /group/{groupId}?embedTopics=true`  
+    请求数据：无  
+    响应数据：小组详情  
+    ``` javascript
     {
         "id": 28,
         "leader": {
-            "id": 1,
-            "name": "张三",
-            "number": "24320162093849"
+            "id": 8888,
+            "name": "张三"
         },
         "members": [
             {
-                "id": 230,
-                "name": "李四",
-                "number": "24320152202978"
+                "id": 5324,
+                "name": "李四"
             },
             {
-                "id": 2908,
-                "name": "李二狗",
-                "number": "24320152202998"
+                "id": 5678,
+                "name": "王五"
             }
         ],
         "topics": [
             {
-                "id": 10,
-                "name": "领域模型"
+                "id": 257,
+                "name": "领域模型与模块"
             }
-        ]
+        ],
+        "report": ""
     }
     ```
     `PUT /group/{groupId}`  
