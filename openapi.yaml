@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-beta.1"
+  version: "1.0.0-beta.2"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -1541,8 +1541,8 @@ paths:
   '/topic/{topicId}/group':
     get:
       tags:
-        - group
-      summary: 按ID获取选择了该话题的小组
+        - topic
+      summary: 按话题ID获取选择了该话题的小组
       operationId: getGroupsByTopicId
       parameters:
       - name: topicId
@@ -1566,84 +1566,6 @@ paths:
           description: 错误的ID格式
         '404':
           description: 未找到讨论课
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-    post:
-      tags:
-        - group
-      summary: 小组按ID选择话题
-      operationId: selectTopic
-      parameters:
-      - name: topicId
-        in: path
-        description: 选择的话题的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/Group'
-              - required:
-                - id
-              example: {"id": 27}
-      responses:
-        '201':
-          description: 成功
-          content:
-            application/json:
-              schema:
-                properties: 
-                  url:
-                    type: string
-                    format: url
-                    example: "/topic/23/group/27"
-        '400':
-          description: 错误的ID格式或话题已满
-        '403':
-          description: 权限不足（不是该小组的组长）
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/topic/{topicId}/group/{groupId}':
-    delete:
-      tags:
-        - group
-      summary: 小组按ID取消选择话题
-      operationId: deselectTopic
-      parameters:
-      - name: topicId
-        in: path
-        description: 取消选择的话题的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: groupId
-        in: path
-        description: 小组ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        '204':
-          description: 成功
-        '400':
-          description: 错误的ID格式
-        '404':
-          description: 未找到话题选择
-        '403':
-          description: 权限不足（不是该小组的组长）
       security:
         - http_pwd: []
         - mp_code: []
@@ -1845,6 +1767,86 @@ paths:
           description: 权限不足（不是该小组的组长）
         '404':
           description: 未找到小组
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/topic':
+    post:
+      tags:
+        - group
+      summary: 小组按ID选择话题
+      operationId: selectTopic
+      parameters:
+      - name: groupId
+        in: path
+        description: 小组的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        description: 话题的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Topic'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                properties: 
+                  url:
+                    type: string
+                    format: url
+                    example: "/group/27/topic/23"
+        '400':
+          description: 错误的ID格式或话题已满
+        '403':
+          description: 权限不足（不是该小组的组长）
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/topic/{topicId}':
+    delete:
+      tags:
+        - group
+      summary: 小组按ID取消选择话题
+      operationId: deselectTopic
+      parameters:
+      - name: topicId
+        in: path
+        description: 取消选择的话题的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: groupId
+        in: path
+        description: 小组ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到话题选择
+        '403':
+          description: 权限不足（不是该小组的组长）
       security:
         - http_pwd: []
         - mp_code: []

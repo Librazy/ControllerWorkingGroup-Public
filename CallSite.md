@@ -283,6 +283,14 @@
         见 5.  
         > 加载侧边栏，这里可以用 JavaScript 在 localStorage 内缓存课程信息，免去每次访问的重复请求，以下不再包含对侧边栏课程详情的请求
     * `提交.onclick`：  
+        `POST /upload/classroster`
+        请求数据：学生名单列表文件（ .xlsx 或 .csv ）  
+        响应数据：  
+        ```javascript
+        {
+            "url": "/roster/周三12班.xlsx"
+        }
+        ```
         `POST /course`  
         请求数据：包含班级的具体信息  
         ```javascript
@@ -908,18 +916,28 @@
         }
         ```  
         `GET /seminar/{seminarId}/topic`  
+        请求数据：无  
+        响应数据：话题详情列表  
+        `GET /seminar/{seminarId}/group?include={studentId}`  
+        请求数据：无  
+        响应数据：学生所在的组的ID  
+        ``` javascript
+        [{
+            "id": 28
+        }]
+        ```
     * `选择话题.onclick`：  
-        `POST /topic/{topicId}/group`  
-        请求数据：
+        `POST /group/{groupId}/topic`  
+        请求数据：话题ID
         ``` javascript
         {
-          "id": 27
+          "id": 23
         }
         ```
         响应数据：HTTP 201
         ``` javascript
         {
-            "url": "/topic/23/group/27"
+            "url": "/group/27/topic/23"
         }
         ```
     ![Student--课程内页-讨论课（固定分组）-上传报告](images/Student--课程内页-讨论课（固定分组）-上传报告.png)
@@ -989,7 +1007,7 @@
             }
         ]
         ```
-    * `修改.onclick`：  
+    * `确定.onclick`：  
         `PATCH /class/{classId}/classgroup`  
         请求数据：
         ``` javascript
@@ -1702,17 +1720,17 @@
         ]
         ```  
     ![FixedGroupChooseTopicUI2](images/FixedGroupChooseTopicUI2.png)  
-    * 选择话题 `POST /topic/{topicId}/group`
-        请求数据：  
+    * 选择话题 `POST /group/{groupId}/topic`
+        请求数据：话题ID  
         ``` javascript
         {
-            "id": 28
+            "id": 23
         }
         ```
         响应数据：  
         ``` javascript
         {
-            "url": "/topic/23/group/28"
+            "url": "/group/28/topic/23"
         }
         ```
 5. 打分（GradePresentationUI、GradePresentationEndUI）  
