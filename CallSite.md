@@ -179,6 +179,26 @@
         `DELETE /course/{courseId}`
         请求数据：无  
         响应数据：HTTP 204
+    ![Teacher--教师主页（课程信息）-修改课程](images/Teacher--教师主页（课程信息）-修改课程.png)
+    * `修改课程.提交.onclick`：  
+        `PUT /course/{courseId}`
+        请求数据：修改后的课程信息  
+        ``` javascript
+        {
+            "name": "OOAD",
+            "description": "面向对象分析与设计",
+            "startTime": "2017-09-20",
+            "endTime": "2018-1-1",
+            "proportions": {
+                "3": 20,
+                "4": 60,
+                "5": 20,
+                "report": 70,
+                "presentation": 30
+            }
+        }
+        ```
+        响应：HTTP 204
 4. Teacher--新建课程
     ![Teacher--新建课程](images/Teacher--新建课程.png)
     * `提交.onclick`：  
