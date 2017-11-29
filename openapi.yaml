@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-beta.2"
+  version: "1.0.0-beta.2.1"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -473,7 +473,7 @@ paths:
   '/course/{courseId}/class':
     get:
       tags:
-        - class
+        - course
       summary: 按ID获取课程的班级列表
       operationId: getClassesByCourseId
       parameters:
@@ -510,7 +510,7 @@ paths:
           - snsapi_login
     post:
       tags:
-        - class
+        - course
       summary: 在指定ID的课程创建班级
       operationId: createClassByCourseId
       parameters:
@@ -1157,7 +1157,7 @@ paths:
   '/course/{courseId}/seminar':
     get:
       tags:
-        - seminar
+        - course
       summary: 按ID获取课程的讨论课
       operationId: getSeminarsByCourseId
       parameters:
@@ -1198,7 +1198,7 @@ paths:
           - snsapi_login
     post:
       tags:
-        - seminar
+        - course
       summary: 在指定ID的课程创建讨论课
       operationId: createSeminarByCourseId
       parameters:
@@ -1351,7 +1351,7 @@ paths:
   '/seminar/{seminarId}/topic':
     get:
       tags:
-        - topic
+        - seminar
       summary: 按ID获取讨论课的话题
       operationId: getTopicsBySeminarId
       parameters:
@@ -1391,7 +1391,7 @@ paths:
           - snsapi_login
     post:
       tags:
-        - topic
+        - seminar
       summary: 在指定ID的讨论课创建话题
       operationId: createTopicBySeminarId
       parameters:
@@ -1574,7 +1574,7 @@ paths:
   '/seminar/{seminarId}/group':
     get:
       tags:
-        - group
+        - seminar
       summary: 按讨论课ID查找小组
       operationId: getGroupBySeminarId
       parameters:
