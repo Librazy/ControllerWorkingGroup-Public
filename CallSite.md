@@ -1848,7 +1848,7 @@
     {
         "id": 1, "name": "讨论课1",
         "description": "第一章练习",
-        "groupWay": "固定分组",
+        "groupingMethod": "fixed",
         "startTime": "11/10/2017",
         "endTime": "17/10/2017",
     }
