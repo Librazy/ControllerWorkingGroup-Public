@@ -300,26 +300,7 @@
         {
             "name": "周三1-2节",
             "site": "海韵212",
-            "time": [
-                {
-                    "week": 1,
-                    "day": 1,
-                    "time":
-                        [
-                            1,
-                            2
-                        ]
-                },
-                {
-                    "week": 0,
-                    "day": 3,
-                    "time":
-                        [
-                            3,
-                            4
-                        ]
-                }
-            ],
+            "time": "周三一二节",
             "proportions": {
                 "3": 10,
                 "4": 60,
@@ -344,26 +325,7 @@
              "id": 23,
              "name": "周三1-2节",
              "numStudent": 120,
-             "time": [
-                {
-                     "week": 1,
-                     "day": 1,
-                     "lessons": [
-                        1,
-                        2
-                     ],
-                     "site": "海韵201"
-               },
-               {
-                     "week": 0,
-                     "day": 3,
-                     "lessons": [
-                         3,
-                         4
-                      ],
-                     "site": "公寓405"
-                }
-            ],
+             "time": "周三一二节",
             "calling": true,
             "roster": "/roster/周三12班.xlsx",
             "proportions": {
@@ -378,32 +340,13 @@
 8. 课程内页--周三1-2节修改：
     ![Teacher--课程内页-周三1-2节修改](images/Teacher--课程内页-周三1-2节修改.png)
     * `提交.onclick`：
-        `PUT /course/{courseId}`  
+        `PUT /class/{classId}`  
         请求数据：  
         ```javascript
         {
             "name": "周三1-2节",
             "site": "海韵212",
-            "time": [
-                {
-                    "week": 1,
-                    "day": 1,
-                    "time":
-                        [
-                            1,
-                            2
-                        ]
-                },
-                {
-                    "week": 0,
-                    "day": 3,
-                    "time":
-                        [
-                            3,
-                            4
-                        ]
-                }
-            ],
+            "time": "周三 一二节",
             "proportions": {
                 "3": 10,
                 "4": 60,
@@ -1274,26 +1217,7 @@
             "id": 23,
             "name": "周三1-2节",
             "numStudent": 120,
-            "time": [
-                {
-                "week": 1,
-                "day": 1,
-                "lessons": [
-                    1,
-                    2
-                ],
-                "site": "海韵201"
-                },
-                {
-                "week": 0,
-                "day": 3,
-                "lessons": [
-                    3,
-                    4
-                ],
-                "site": "公寓405"
-                }
-            ],
+            "time": "周三 一二节",
             "calling": true,
             "roster": "/roster/周三12班.xlsx",
             "proportions": {
