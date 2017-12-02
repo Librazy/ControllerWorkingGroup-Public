@@ -294,7 +294,7 @@
             "url": "/roster/周三12班.xlsx"
         }
         ```
-        `POST /course`  
+        `POST /course/{courseId}/class`  
         请求数据：包含班级的具体信息  
         ```javascript
         {
@@ -1886,7 +1886,7 @@
 9. RollCallUI：  
     ![RollCallUI](images/RollCallUI.png)  
     `GET /seminar/{seminarId}/detail`  
-    [按ID获取讨论课详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarDetailById)
+    [按ID获取讨论课详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarDetailById)  
     `PUT /class/{classId}/attendance/{studentId}`  
     请求数据：GPS位置
     ``` javascript
