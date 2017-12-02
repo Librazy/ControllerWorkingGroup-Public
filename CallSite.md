@@ -789,6 +789,7 @@
         ```
 7. 讨论课（随机分组）
     ![Student--课程内页-讨论课（随机分组）](images/Student--课程内页-讨论课（随机分组）.png)
+    > TODO：图片未更新
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
         请求数据：无  
@@ -803,57 +804,8 @@
             "endTime": "2017-10-24"
         }
         ```  
-        `GET /seminar/{seminarId}/group?include={studentId}`  
-        请求数据：无  
-        响应数据：学生所在的组的ID  
-        ``` javascript
-        [{
-            "id": 28
-        }]
-        ```
-        `GET /group/{groupId}?embedTopics=true`  
-        请求数据：无  
-        响应数据：小组详情  
-        ``` javascript
-        {
-            "id": 28,
-            "leader": {
-                "id": 8888,
-                "name": "张三"
-            },
-            "members": [
-                {
-                    "id": 5324,
-                    "name": "李四"
-                },
-                {
-                    "id": 5678,
-                    "name": "王五"
-                }
-            ],
-            "topics": [
-                {
-                    "id": 257,
-                    "name": "领域模型与模块"
-                }
-            ],
-            "report": ""
-        }
-        ```
-        `GET /seminar/{seminarId}/topic`  
-        请求数据：无  
-        响应数据：话题列表，如  
-        ``` javascript
-        [
-          {
-            "id": 257,
-            "name": "领域模型与模块",
-            "description": "Domain model与模块划分",
-            "groupLimit": 5,
-            "groupLeft": 2
-          }
-        ]
-        ```
+        `GET /seminar/{seminarId}/group/my`  
+        [按讨论课ID获取学生所在小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentGroupBySeminarId)
 8. 讨论课（固定分组）
     ![Student--课程内页-讨论课（固定分组）](images/Student--课程内页-讨论课（固定分组）.png)
     * `window.onload`：  
