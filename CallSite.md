@@ -1395,7 +1395,11 @@
 
 ### 小程序 Student
 
-1. CheckStudentInfoUI：  
+1. Student_MainUI  
+    ![Student_MainUI](images/Student_MainUI.png)  
+    `GET /class`  
+    [获取与当前用户相关的班级列表](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/getClass)
+2. CheckStudentInfoUI：  
     ![CheckStudentInfoUI](images/CheckStudentInfoUI.png)
     * 获取：`GET /me`  
         请求数据：无  
@@ -1444,7 +1448,7 @@
         {"phone": ""}
         ```
         响应数据：HTTP 204
-2. CourseUI  
+3. CourseUI  
     ![CourseUI](images/CourseUI.png)  
     `GET /course/{courseId}/seminar`  
     请求数据：无  
@@ -1489,7 +1493,7 @@
         "grade": 4
     }
     ```  
-3. CourseInfoUI  
+4. CourseInfoUI  
     ![CourseInfoUI](images/CourseInfoUI.png)  
     `GET /course/{courseId}`  
     请求数据：无  
@@ -1503,7 +1507,7 @@
     "teacherEmail": "mingqiu@xmu.edu.cn"
     }
     ```  
-4. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
+5. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
     ![FixedGroupNoLeaderUI2](images/FixedGroupNoLeaderUI2.png)  
     * 获得分组信息：
         `GET /seminar/{seminarId}/group?include={studentId}`  
@@ -1561,7 +1565,7 @@
         }
         ```  
         响应数据：HTTP 204  
-5. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
+6. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
     ![FixedGroupChooseTopicUI1](images/FixedGroupChooseTopicUI1.png)  
     * 获得所有话题 `GET /seminar/{seminarId}/topic`  
         请求数据：无  
@@ -1591,7 +1595,7 @@
             "url": "/group/28/topic/23"
         }
         ```
-6. 打分（GradePresentationUI、GradePresentationEndUI）  
+7. 打分（GradePresentationUI、GradePresentationEndUI）  
     ![GradePresentationUI](images/GradePresentationUI.png)  
     `GET /seminar/{seminarId}/group?gradeable={true}`  
     请求数据：无  
@@ -1625,7 +1629,7 @@
     }
     ```  
     响应数据：HTTP 204  
-7. RandomGroupUI：  
+8. RandomGroupUI：  
     ![RandomGroupUI](images/RandomGroupUI.png)  
     `GET /seminar/{seminarId}/group?include={studentId}`  
     请求数据：无  
@@ -1695,9 +1699,9 @@
     }
     ```
     响应数据：HTTP 204  
-8. RandomGroupChoosetopic：  
+9. RandomGroupChoosetopic：  
     同 4  
-9. RollCallUI：  
+10. RollCallUI：  
     ![RollCallUI](images/RollCallUI.png)  
     `GET /seminar/{seminarId}/detail`  
     [按ID获取讨论课详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarDetailById)  
