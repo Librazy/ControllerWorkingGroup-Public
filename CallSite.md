@@ -1691,7 +1691,21 @@
         "grade": 4
     }
     ```  
-3. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
+3. CourseInfoUI  
+    ![CourseInfoUI](images/CourseInfoUI.png)  
+    `GET /course/{courseId}`  
+    请求数据：无  
+    响应数据：课程信息
+    ``` javascript
+    {
+    "id": 23,
+    "name": "OOAD",
+    "description": "面向对象分析与设计",
+    "teacherName": "邱明",
+    "teacherEmail": "mingqiu@xmu.edu.cn"
+    }
+    ```  
+4. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
     ![FixedGroupNoLeaderUI2](images/FixedGroupNoLeaderUI2.png)  
     * 获得分组信息：
         `GET /seminar/{seminarId}/group?include={studentId}`  
@@ -1749,7 +1763,7 @@
         }
         ```  
         响应数据：HTTP 204  
-4. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
+5. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
     ![FixedGroupChooseTopicUI1](images/FixedGroupChooseTopicUI1.png)  
     * 获得所有话题 `GET /seminar/{seminarId}/topic`  
         请求数据：无  
@@ -1779,7 +1793,7 @@
             "url": "/group/28/topic/23"
         }
         ```
-5. 打分（GradePresentationUI、GradePresentationEndUI）  
+6. 打分（GradePresentationUI、GradePresentationEndUI）  
     ![GradePresentationUI](images/GradePresentationUI.png)  
     `GET /seminar/{seminarId}/group?gradeable={true}`  
     请求数据：无  
@@ -1813,7 +1827,7 @@
     }
     ```  
     响应数据：HTTP 204  
-6. RandomGroupUI：  
+7. RandomGroupUI：  
     ![RandomGroupUI](images/RandomGroupUI.png)  
     `GET /seminar/{seminarId}/group?include={studentId}`  
     请求数据：无  
@@ -1883,9 +1897,9 @@
     }
     ```
     响应数据：HTTP 204  
-7. RandomGroupChoosetopic：  
+8. RandomGroupChoosetopic：  
     同 4  
-8. RollCallUI：  
+9. RollCallUI：  
     ![RollCallUI](images/RollCallUI.png)  
     `GET  /seminar/{seminarId}`  
     请求数据：无  
