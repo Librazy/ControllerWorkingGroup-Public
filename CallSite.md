@@ -1020,24 +1020,8 @@
         ]
         ```
     * `确定.onclick`：  
-        `PATCH /class/{classId}/classgroup`  
-        请求数据：
-        ``` javascript
-        {
-            "leader": {
-                "id": 5678
-            },
-            "members": [
-                {
-                "id": 8888
-                },
-                {
-                "id": 5324
-                }
-            ]
-        }
-        ```
-        响应数据：HTTP 204  
+        `PUT /class/{classId}/classgroup/add`  
+        [添加班级小组成员](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/addClassGroupMember)
 11. 固定分组3
     ![Student--课程内页-固定分组3](images/Student--课程内页-固定分组3.png)
     见 9
@@ -1503,10 +1487,10 @@
     见5  
 14. RandomEndRollCallUI  
     见6  
-15. RollCallListUI
+15. RollCallListUI  
     见7
 16. ChooseSchool1/ChooseSchool2  
-    无 
+    无
 17. ChooseSchool3/ChooseSchool4  
     ![ChooseSchool4](images/ChooseSchool4.png)
     * 获取：`GET /school?city=厦门`  
