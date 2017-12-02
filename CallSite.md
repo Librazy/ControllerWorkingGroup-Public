@@ -1111,54 +1111,8 @@
         响应数据：HTTP 204  
 3. ClassManage：  
     ![ClassManage](images/ClassManage.png)
-    * 获取课程信息 `GET /course/{courseId}`  
-        请求数据:无  
-        响应数据：  
-        ``` javascript
-        {
-            "id": 23,
-            "name": "OOAD",
-            "description": "面向对象分析与设计"
-        }
-        ```
-    * 获取讨论课信息  `GET /course/{courseId}/seminar`  
-        请求数据:无  
-        响应数据：
-        ``` javascript
-        [
-            {
-                "id": 29,
-                "name": "界面原型设计",
-                "description": "界面原型设计",
-                "groupingMethod": "fixed",
-                "startTime": "2017-09-25",
-                "endTime": "2017-10-09"
-            },
-            {
-                "id": 32,
-                "name": "概要设计",
-                "description": "模型层与数据库设计",
-                "groupingMethod": "fixed",
-                "startTime": "2017-10-10",
-                "endTime": "2017-10-24"
-            }
-        ]
-        ```
-    * 获取班级:`GET /course/{courseId}/class`  
-        请求数据:无  
-        响应数据:
-        ``` javascript  
-        [
-            {
-                "id": 45,
-                "name": "周三1-2节"
-            },
-            {
-                "id": 48,
-                "name": "周三3-4节"
-            }
-        ]
-        ```
+    * 获取正在进行的讨论课 `GET /course/{courseId}/seminar/current`  
+    [获取课程正在进行的讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/getCurrentSeminarByCourseId)  
 4. FixedRollStartCallUI：  
     ![FixedRollStartCallUI](images/FixedRollStartCallUI.png)
     * 班级详情：`GET /class/{classId}`  
