@@ -1256,7 +1256,7 @@
     ```  
 9. FixedGroupInfoUI  
     ![FixedGroupInfoUI](images/FixedGroupInfoUI.png)
-    * 查看分组:`GET /seminar/{seminar}/group`  
+    * 查看分组:`GET /seminar/{seminar}/group?classId={classId}`  
         请求数据: 无  
         响应数据: 小组ID列表  
         ``` javascript
