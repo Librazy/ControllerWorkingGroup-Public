@@ -1885,18 +1885,8 @@
     同 4  
 9. RollCallUI：  
     ![RollCallUI](images/RollCallUI.png)  
-    `GET  /seminar/{seminarId}`  
-    请求数据：无  
-    响应数据：  
-    ```javascript
-    {
-        "id": 1, "name": "讨论课1",
-        "description": "第一章练习",
-        "groupingMethod": "fixed",
-        "startTime": "11/10/2017",
-        "endTime": "17/10/2017",
-    }
-    ```
+    `GET /seminar/{seminarId}/detail`  
+    [按ID获取讨论课详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarDetailById)
     `PUT /class/{classId}/attendance/{studentId}`  
     请求数据：GPS位置
     ``` javascript
