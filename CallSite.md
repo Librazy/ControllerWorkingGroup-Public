@@ -53,7 +53,10 @@
         {
             "name": "张三",
             "type": "student",
-            "school": "厦门大学",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
             "gender": "male",
             "number": "24320152202333",
             "email": "xxxxx@xx.com"
@@ -72,11 +75,11 @@
         请求数据：  
         ``` javascript
         {
-            "phone": "18911114514",
-            "password": "qwer2345!",
             "name": "张三",
-            "type": "student",
-            "school": "厦门大学",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
             "gender": "male",
             "number": "24320152202333",
             "email": "xxxxx@xx.com"
@@ -90,11 +93,11 @@
         请求数据：  
         ``` javascript
         {
-            "phone": "18911114514",
-            "password": "qwer2345!",
             "name": "张三",
-            "type": "teacher",
-            "school": "厦门大学",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
             "gender": "male",
             "number": "24320152202333",
             "email": "xxxxx@xx.com"
@@ -654,13 +657,17 @@
         ``` javascript
         {
             "id": 3486,
-            "number": "2432015220XXXX",
-            "name": "XXX",
-            "phone": "xxxxxx",
-            "email": "xxxxx@xx.com",
-            "gender": "男",
-            "school": "厦门大学",
-            "title": "本科",
+            "type": "student",
+            "name": "张三",
+            "number": "23320152202333",
+            "phone": "18911114514",
+            "email": "23320152202333@stu.xmu.edu.cn",
+            "gender": "male",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
+            "title": "",
             "avatar": "/avatar/3486.png"
         }
         ```  
@@ -674,13 +681,18 @@
         请求数据：包含待修改信息的JSON  
         ``` javascript
         {
-            "number": "2432015220XXXX",
-            "name": "XXX",
-            "phone": "xxxxxx",
-            "email": "xxxxx@xx.com",
-            "gender": "male",
-            "school": "厦门大学",
-            "title": "本科",
+            "id": 3486,
+            "type": "student",
+            "name": "张三",
+            "number": "23320152202333",
+            "phone": "18911114514",
+            "email": "23320152202333@stu.xmu.edu.cn",
+            "gender": "female",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
+            "title": "",
             "avatar": "/avatar/3486.png"
         }
         ```  
@@ -1080,9 +1092,12 @@
         请求数据：  
         ```javascript
         {
-          "number": "23320152202333",
-          "name":"张三",
-          "school":"厦门大学"
+            "number": "23320152202333",
+            "name":"张三",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            }
         }
         ```
         响应：HTTP 204  
@@ -1092,9 +1107,12 @@
         请求数据：  
         ```javascript
         {
-          "number": "23320152202333",
-          "name":"张三",
-          "school":"厦门大学"
+            "number": "23320152202333",
+            "name":"张三",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            }
         }
         ```
         响应：HTTP 204  
@@ -1138,7 +1156,21 @@
         请求数据：无  
         响应数据：包含教师账号信息的JSON，如  
         ``` javascript
-        {"id": 3486, "type": "teacher", "name": "邱明", "number": "24321432534", "avatar": "/avatar/3486.png"}  
+        {
+            "id": 3486,
+            "type": "teacher",
+            "name": "张三",
+            "number": "24321432534",
+            "phone": "18159215806",
+            "email": "23320152202333@stu.xmu.edu.cn",
+            "gender": "male",
+            "school": {
+                "id": 32,
+                "name": "厦门大学"
+            },
+            "title": "教授",
+            "avatar": "/avatar/3486.png"
+        }
         ```
         下：`GET /course`  
         请求数据：无  
@@ -1157,15 +1189,19 @@
         ``` javascript
         {
             "id": 3486,
-            "name": "邱明", 
-            "number": "24321432534"
+            "type": "teacher",
+            "name": "张三",
+            "number": "24321432534",
             "phone": "18159215806",
-            "school": : {
+            "email": "23320152202333@stu.xmu.edu.cn",
+            "gender": "male",
+            "school": {
                 "id": 32,
                 "name": "厦门大学"
             },
+            "title": "教授",
             "avatar": "/avatar/3486.png"
-        }  
+        }
         ```
     * 点击“点击头像修改”：  
         `POST /upload/avatar`  
@@ -1576,8 +1612,8 @@
             "email": "23320152202333@stu.xmu.edu.cn",
             "gender": "male",
             "school": {
-            "id": 32,
-            "name": "厦门大学"
+                "id": 32,
+                "name": "厦门大学"
             },
             "title": "",
             "avatar": "/avatar/3486.png"
