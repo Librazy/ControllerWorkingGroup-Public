@@ -1118,6 +1118,16 @@
         }
         ```
         > RegistUI 应为 RegisterUI
+5. ChooseCharacter  
+    ![ChooseCharacter](images/ChooseCharacter.png)  
+    * 选择身份`PUT /me`  
+        请求数据：  
+        ```javascript
+        {
+          "type":"student"
+        }
+        ```
+        响应：HTTP 204
 
 ### 小程序 Teacher
 
