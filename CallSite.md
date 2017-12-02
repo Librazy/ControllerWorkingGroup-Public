@@ -922,25 +922,9 @@
     见 9
 12. 查看分数
     ![Student--课程内页-查看分数](images/Student--课程内页-查看分数.png)
-    * `window.onload`：
-        `GET /group/{groupId}/grade`
-        请求数据：无
-        响应数据：得到该学生的小组分数
-        ``` javascript
-        {
-             "presentationGrade": [
-                {
-                     "topicId": 257,
-                     "grade": 4
-                },
-               {
-                     "topicId": 258,
-                     "grade": 5
-               }
-            ],
-            "reportGrade": null
-        }
-        ```
+    * `window.onload`：  
+        `GET /course/{courseId}/grade`  
+        [按课程ID获取学生的所有讨论课成绩](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/getGradesByCourseId)
 
 ## 小程序
 
