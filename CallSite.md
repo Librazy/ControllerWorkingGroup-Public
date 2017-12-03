@@ -1399,7 +1399,11 @@
     "teacherEmail": "mingqiu@xmu.edu.cn"
     }
     ```  
-5. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
+5. SeminarFixedGroupNoSelection/SeminarRandomGroupNoSelection  
+    ![SeminarFixedGroupNoSelection](images/SeminarFixedGroupNoSelection.png)  
+    `GET /seminar/{seminarId}`  
+    [按ID获取与学生有关的讨论课信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentSeminarById)  
+6. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
     ![FixedGroupNoLeaderUI2](images/FixedGroupNoLeaderUI2.png)  
     * 获得分组信息：
         `GET /seminar/{seminarId}/group?include={studentId}`  
@@ -1457,7 +1461,7 @@
         }
         ```  
         响应数据：HTTP 204  
-6. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
+7. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
     ![FixedGroupChooseTopicUI1](images/FixedGroupChooseTopicUI1.png)  
     * 获得所有话题 `GET /seminar/{seminarId}/topic`  
         请求数据：无  
@@ -1487,7 +1491,7 @@
             "url": "/group/28/topic/23"
         }
         ```
-7. 打分（GradePresentationUI、GradePresentationEndUI）  
+8. 打分（GradePresentationUI、GradePresentationEndUI）  
     ![GradePresentationUI](images/GradePresentationUI.png)  
     `GET /seminar/{seminarId}/group?gradeable={true}`  
     请求数据：无  
@@ -1521,7 +1525,7 @@
     }
     ```  
     响应数据：HTTP 204  
-8. RandomGroupUI：  
+9. RandomGroupUI：  
     ![RandomGroupUI](images/RandomGroupUI.png)  
     `GET /seminar/{seminarId}/group?include={studentId}`  
     请求数据：无  
@@ -1591,9 +1595,9 @@
     }
     ```
     响应数据：HTTP 204  
-9. RandomGroupChoosetopic：  
+10. RandomGroupChoosetopic：  
     同 4  
-10. RollCallUI：  
+11. RollCallUI：  
     ![RollCallUI](images/RollCallUI.png)  
     `GET /seminar/{seminarId}/detail`  
     [按ID获取讨论课详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarDetailById)  
