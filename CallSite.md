@@ -595,162 +595,41 @@
     ![Student--基本信息](images/Student--基本信息.png)
     * `window.onload`：  
         `GET /me`  
-        请求数据：无  
-        响应数据：包含学生基本信息的JSON  
-        ``` javascript
-        {
-            "id": 3486,
-            "type": "student",
-            "name": "张三",
-            "number": "23320152202333",
-            "phone": "18911114514",
-            "email": "23320152202333@stu.xmu.edu.cn",
-            "gender": "male",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "title": "",
-            "avatar": "/avatar/3486.png"
-        }
-        ```  
+        [获取当前用户信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/me/getCurrentUser)  
         > 个人信息是否包含学院的问题目前界面组尚未回应
 2. 基本信息修改  
     ![Student--基本信息修改](images/Student--基本信息修改.png)
     * `window.onload`：  
         `GET /me`  
-    * `提交.onclick`：  
+        [获取当前用户信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/me/getCurrentUser)  
+    * `提交.onclick`：  
         `PUT /me`  
-        请求数据：包含待修改信息的JSON  
-        ``` javascript
-        {
-            "id": 3486,
-            "type": "student",
-            "name": "张三",
-            "number": "23320152202333",
-            "phone": "18911114514",
-            "email": "23320152202333@stu.xmu.edu.cn",
-            "gender": "female",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "title": "",
-            "avatar": "/avatar/3486.png"
-        }
-        ```  
-        响应数据： HTTP 204  
+        [修改当前用户信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/me/updateCurrentUser)  
         > 具体哪些个人信息可修改界面组暂未确定
 3. 学生主页（课程信息）
     ![Student--学生主页（课程信息）](images/Student--学生主页（课程信息）.png)
     * `window.onload`：  
         `GET /class`  
-        请求数据：无  
-        响应数据：包含与该学生关联的班级信息，如  
-        ``` javascript
-        [
-            {
-                "id": 23,
-                "name": "周三1-2节",
-                "site": "公寓405",
-                "course": {
-                    "id": 2,
-                    "name": "OOAD",
-                    "lessonsPerWeek": 6
-                }
-            },
-            {
-                "id": 42,
-                "name": "一班",
-                "site": "海韵202",
-                "course": {
-                    "id": 5,
-                    "name": ".Net 平台开发",
-                    "lessonsPerWeek": 2
-                }
-            }
-        ]
-        ```  
+        [获取与学生相关的班级信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/getClass)  
     * `退选课程.onclick`：  
         `DELETE /class/{classId}/student/{studentId}`  
-        请求数据:无  
-        响应：HTTP 204  
+        [学生按ID取消选择班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/deselectClass)
 4. 选择课程（未查询）  
     ![Student--选择课程（未查询）](images/Student--选择课程（未查询）.png)
     * `window.onload`：  
         `GET /class?courseName=*&teacherName=*`  
-        请求数据：无  
-        响应数据：包含所有班级的信息，如  
-        ``` javascript
-        [
-            {
-                "id": 23,
-                "name": "周三1-2节",
-                "site": "公寓405",
-                "course": {
-                    "id": 2,
-                    "name": "OOAD",
-                    "lessonsPerWeek": 6
-                }
-            },
-            {
-                "id": 42,
-                "name": "一班",
-                "site": "海韵202",
-                "course": {
-                    "id": 5,
-                    "name": ".Net 平台开发",
-                    "lessonsPerWeek": 2
-                }
-            }
-        ]
-        ```  
+        [获取所有班级信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/getClass)  
     * `选择课程.onclick`：  
         `POST /class/{classId}/student`  
-        请求数据：学生ID  
-        ``` javascript
-        {
-            "id": 233
-        }
-        ```
-        响应数据：HTTP 201  
-        ``` javascript
-        {
-            "url": "/class/34/student/2757"
-        }
-        ```
+        [学生按ID选择班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/selectClass2)
 5. 选择课程（查询后）  
     ![Student--选择课程（查询后）](images/Student--选择课程（查询后）.png)
     * `window.onload`：  
         `GET /class?courseName=ooad&teacher=邱明`  
-        请求数据：无  
-        响应数据：包含查询课程的信息，如  
-        ``` javascript
-        [
-            {
-                "id": 23,
-                "name": "周三1-2节",
-                "site": "公寓405",
-                "course": {
-                    "id": 2,
-                    "name": "OOAD",
-                    "lessonsPerWeek": 6
-                }
-            },
-            {
-                "id": 24,
-                "name": "周三3-4节",
-                "site": "公寓405",
-                "course": {
-                    "id": 2,
-                    "name": "OOAD",
-                    "lessonsPerWeek": 6
-                }
-            },
-        ]
-        ```
-    * `选择课程.onclick`：  
+        [获取符合查询条件的班级信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/getClass)  
+    * `选择课程.onclick`：  
         `POST /class/{classId}/student`  
+        [学生按ID选择班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/selectClass2)
 6. 课程内页-首页
     ![Student--课程内页-首页](images/Student--课程内页-首页.png)
     * `window.onload`：  
@@ -1386,126 +1265,25 @@
     [按ID获取与学生有关的讨论课信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentSeminarById)  
 6. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
     ![FixedGroupNoLeaderUI2](images/FixedGroupNoLeaderUI2.png)  
-    * 获得分组信息：
-        `GET /seminar/{seminarId}/group?include={studentId}`  
-        请求数据：无  
-        响应数据：该学生所在的分组的ID  
-        ``` javascript
-        [{
-            "id": 28
-        }]
-        ```  
-        `GET /group/{groupId}?embedTopics=true`
-        请求数据：无  
-        响应数据：小组详情  
-        ``` javascript
-        {
-            "id": 28,
-            "leader": {
-                "id": 8888,
-                "name": "张三"
-            },
-            "members": [
-                {
-                "id": 5324,
-                "name": "李四"
-                },
-                {
-                "id": 5678,
-                "name": "王五"
-                }
-            ],
-            "topics": [
-                {
-                "id": 257,
-                "name": "领域模型与模块"
-                }
-            ],
-            "report": ""
-        }
-        ```  
-    * 队长辞职/成为队长：`PUT /group/{groupID}`  
-        请求数据：包含修改的信息（队长id）  
-        ``` javascript
-        {
-            "leader": {
-                "id": 5678
-            },
-            "members": [
-                {
-                    "id": 8888
-                },
-                {
-                    "id": 5324
-                }
-            ]
-        }
-        ```  
-        响应数据：HTTP 204  
+    * 获得分组信息：`GET /seminar/{seminarId}/group/my`  
+    [按讨论课ID获取学生所在小组详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentGroupBySeminarId)  
+    * 队长辞职：`PUT /group/{groupID}/resign`  
+    [队长辞职](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/resignGroupLeader)  
+    * 成为队长：`PUT /group/{groupID}/assign`  
+    [成为队长](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/assignGroupLeader)
 7. 选题（FixedGroupChooseTopicUI1、FixedGroupChooseTopicUI2）  
     ![FixedGroupChooseTopicUI1](images/FixedGroupChooseTopicUI1.png)  
     * 获得所有话题 `GET /seminar/{seminarId}/topic`  
-        请求数据：无  
-        响应数据：包含所有话题的信息的JSON  
-        ``` javascript
-        [
-            {
-                "id": 257,
-                "name": "领域模型与模块",
-                "description": "Domain model与模块划分",
-                "groupLimit": 5,
-                "groupLeft": 2
-            }
-        ]
-        ```  
+    [按ID获取讨论课的话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getTopicsBySeminarId)  
     ![FixedGroupChooseTopicUI2](images/FixedGroupChooseTopicUI2.png)  
-    * 选择话题 `POST /group/{groupId}/topic`
-        请求数据：话题ID  
-        ``` javascript
-        {
-            "id": 23
-        }
-        ```
-        响应数据：  
-        ``` javascript
-        {
-            "url": "/group/28/topic/23"
-        }
-        ```
+    * 选择话题 `POST /group/{groupId}/topic`  
+    [小组按ID选择话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/selectTopic)  
 8. 打分（GradePresentationUI、GradePresentationEndUI）  
-    ![GradePresentationUI](images/GradePresentationUI.png)  
-    `GET /seminar/{seminarId}/group?gradeable={true}`  
-    请求数据：无  
-    响应数据：学生可打分的组的列表  
-    ``` javascript
-    [
-        {
-            "id": 27,
-            "name": A1
-        },
-        {
-            "id": 29,
-            "name": B2
-        }
-    ]
-    ```
-    打分 `PUT /group/{groupId}/grade/{studentId}`  
-    请求数据：包含分数的JSON  
-    ``` javascript
-    {
-        "presentationGrade": [
-        {
-            "topicId": 257,
-            "grade": 4
-        },
-        {
-            "topicId": 258,
-            "grade": 5
-        }
-        ]
-    }
-    ```  
-    响应数据：HTTP 204  
+    ![GradePresentationUI](images/GradePresentationUI.png)  
+    * 得到可以打分的小组 `GET /seminar/{seminarId}/group?gradeable={true}`  
+    [按讨论课ID查找小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getGroupBySeminarId)  
+    * 打分 `PUT /group/{groupId}/grade/presentation/{studentId}`  
+    [提交对其他小组的打分](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/submitGradeByGroupId)  
 9. RandomGroupUI：  
     ![RandomGroupUI](images/RandomGroupUI.png)  
     `GET /seminar/{seminarId}/group?include={studentId}`  
