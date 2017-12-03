@@ -1195,20 +1195,9 @@
 9. FixedGroupInfoUI  
     ![FixedGroupInfoUI](images/FixedGroupInfoUI.png)
     * 查看分组:`GET /seminar/{seminar}/group?classId={classId}`  
-        请求数据: 无  
-        响应数据: 小组ID列表  
-        ``` javascript
-        [
-            {
-                "id": 28
-            },
-            {
-                "id": 29
-            }
-        ]
-        ```
+        [按讨论课ID查找小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getGroupBySeminarId)
         对于展开的小组：  
-        `GET /group/{groupId}?embedTopics=true`  
+        `GET /group/{groupId}`  
         请求数据:无  
         响应数据:  
         ``` javascript
@@ -1450,49 +1439,8 @@
         响应数据：HTTP 204
 3. CourseUI  
     ![CourseUI](images/CourseUI.png)  
-    `GET /course/{courseId}/seminar`  
-    请求数据：无  
-    响应数据：包含该学生的该课程的讨论课  
-    ``` javascript
-    [
-        {
-            "id": 29,
-            "name": "界面原型设计",
-            "description": "界面原型设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-09-25",
-            "endTime": "2017-10-09"
-        },
-        {
-            "id": 32,
-            "name": "概要设计",
-            "description": "模型层与数据库设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-10-10",
-            "endTime": "2017-10-24"
-        }
-    ]
-    ```  
-    对于每个讨论课，请求 `GET /seminar/{seminarId}/group?include={studentId}` 获取小组 `{groupId}`  
-    `GET /group/{groupId}/grade`  
-    请求数据：无  
-    响应数据：  
-    ``` javascript
-    {
-        "presentationGrade": [
-            {
-                "topicId": 257,
-                "grade": 4
-            },
-            {
-                "topicId": 258,
-                "grade": 5
-            }
-        ],
-        "reportGrade": 3,
-        "grade": 4
-    }
-    ```  
+    `GET /course/{courseId}/seminar?embedGrade=true`  
+    [按课程ID获取讨论课详情列表](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/getSeminarsByCourseId)  
 4. CourseInfoUI  
     ![CourseInfoUI](images/CourseInfoUI.png)  
     `GET /course/{courseId}`  
