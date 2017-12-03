@@ -1042,42 +1042,23 @@
     * 获取正在进行的讨论课 `GET /course/{courseId}/seminar/current`  
     [获取课程正在进行的讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/getCurrentSeminarByCourseId)  
 4. FixedRollStartCallUI：  
-    ![FixedRollStartCallUI](images/FixedRollStartCallUI.png)
-    * 班级详情：`GET /class/{classId}`  
-        请求数据：无
-        响应数据：
-        ``` javascript
-        {
-            "id": 23,
-            "name": "周三1-2节",
-            "numStudent": 120,
-            "time": "周三 一二节",
-            "calling": true,
-            "roster": "/roster/周三12班.xlsx",
-            "proportions": {
-                "3": 20,
-                "4": 60,
-                "5": 20,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```
-        > 下面签到部分不再重复班级详情
+    ![FixedRollStartCallUI](images/FixedRollStartCallUI.png)  
+    * 签到状况：`GET /seminar/{seminarId}/class/{classId}/attendance`  
+        [按ID获取讨论课班级签到、分组状态](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarClassAttendance)
     * 开始签到：`PUT /class/{classId}`  
+        [按ID修改班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/updateClassById)  
         请求数据:  
         ``` javascript
-        {"calling": true}
+        {"calling": {seminarId}}
         ```
-        响应：HTTP 204
 5. FixedRollCallUI：  
     ![FixedRollCallUI](images/FixedRollCallUI.png)
     * 结束签到：`PUT /class/{classId}`  
+        [按ID修改班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/updateClassById)  
         请求数据:  
         ``` javascript
-        {"calling": true}
+        {"calling": -1}
         ```
-        响应：HTTP 204
 6. FixedEndRollCallUI：  
     无
 7. RollCallListUI  

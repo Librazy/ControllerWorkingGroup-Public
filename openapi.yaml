@@ -1628,7 +1628,7 @@ paths:
     get:
       tags:
         - seminar
-      summary: 按ID获取讨论课班级签到状态
+      summary: 按ID获取讨论课班级签到、分组状态
       operationId: getSeminarClassAttendance
       parameters:
       - name: classId
@@ -1645,13 +1645,27 @@ paths:
             application/json:
               schema:
                 properties: 
+                  className:
+                    type: string
                   numPresent:
                     type: integer
                   numStudent:
                     type: integer
+                  status:
+                    type: string
+                    enum:
+                    - uncalled
+                    - calling
+                    - called
+                  group:
+                    type: string
+                    enum:
+                    - fixed
+                    - grouping
+                    - grouped
                 required:
                 - numPresent
-                example: {"numPresent": 40, "numStudent": 60}
+                example: {"numPresent": 40, "numStudent": 60, "status": "calling", "group": "grouping"}
         '400':
           description: 错误的ID格式
         '404':
@@ -1684,7 +1698,7 @@ paths:
           format: int64
       responses:
         '200':
-          description: 签到状态
+          description: 已签到名单
           content:
             application/json:
               schema:
