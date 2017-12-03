@@ -789,83 +789,27 @@
         ```
 7. 讨论课（随机分组）
     ![Student--课程内页-讨论课（随机分组）](images/Student--课程内页-讨论课（随机分组）.png)
-    > TODO：图片未更新
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
-        请求数据：无  
-        响应数据：包含讨论课相关信息的JSON  
-        ``` javascript
-        {
-            "id": 32,
-            "name": "概要设计",
-            "description":"模型层与数据库设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-10-10",
-            "endTime": "2017-10-24"
-        }
-        ```  
+        [按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
         `GET /seminar/{seminarId}/group/my`  
-        [按讨论课ID获取学生所在小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentGroupBySeminarId)
+        [按讨论课ID获取学生所在小组详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentGroupBySeminarId)  
 8. 讨论课（固定分组）
     ![Student--课程内页-讨论课（固定分组）](images/Student--课程内页-讨论课（固定分组）.png)
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
-        请求数据：无  
-        响应数据：包含讨论课相关信息的JSON，如  
-        ``` javascript
-        {
-          "id": 32,
-          "name": "概要设计",
-          "description":"模型层与数据库设计",
-          "groupingMethod": "fixed",
-          "startTime": "2017-10-10",
-          "endTime": "2017-10-24"
-        }
-        ```  
-        `GET /seminar/{seminarId}/topic`  
-        请求数据：无  
-        响应数据：话题详情列表  
-        `GET /seminar/{seminarId}/group?include={studentId}`  
-        请求数据：无  
-        响应数据：学生所在的组的ID  
-        ``` javascript
-        [{
-            "id": 28
-        }]
-        ```
+        [按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
+    ![Student--课程内页-讨论课（固定分组）-上传报告](images/Student--课程内页-讨论课（固定分组）-上传报告.png)
+    * 用表单实现
+9. 新查看话题（固定）
+    ![Student--课程内页-新查看话题（固定）](images/Student--课程内页-新查看话题（固定）.png)
+    * `window.onload`：  
+        `GET /topic/{topicId}`  
+        [按ID获取话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/topic/getTopicById)  
     * `选择话题.onclick`：  
         `POST /group/{groupId}/topic`  
-        请求数据：话题ID
-        ``` javascript
-        {
-          "id": 23
-        }
-        ```
-        响应数据：HTTP 201
-        ``` javascript
-        {
-            "url": "/group/27/topic/23"
-        }
-        ```
-    ![Student--课程内页-讨论课（固定分组）-上传报告](images/Student--课程内页-讨论课（固定分组）-上传报告.png)
-    * `上传报告.提交.onclick`  
-        `POST /upload/report`  
-        请求数据：报告PDF文件  
-        响应数据：
-        ``` javascript
-        {
-            "url": "/upload/report/124324.pdf"
-        }
-        ```
-        `PUT /group/{groupId}`  
-        请求数据：
-        ``` javascript
-        {
-            "report": "/upload/report/124324.pdf"
-        }
-        ```
-        响应：HTTP 204
-9. 固定分组
+        [小组按ID选择话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/selectTopic)
+10. 班级小组（固定分组名单）
     ![Student--课程内页-固定分组](images/Student--课程内页-固定分组.png)
     * `window.onload`：
         `GET /class/{classId}/classgroup`  
@@ -892,7 +836,7 @@
             ]
         }
         ```
-10. 固定分组2
+11. 固定分组2
     ![Student--课程内页-固定分组2](images/Student--课程内页-固定分组2.png)
     * `window.onload`：
         `GET /class/{classId}/classgroup`  
@@ -917,10 +861,10 @@
     * `确定.onclick`：  
         `PUT /class/{classId}/classgroup/add`  
         [添加班级小组成员](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/class/addClassGroupMember)
-11. 固定分组3
+12. 固定分组3
     ![Student--课程内页-固定分组3](images/Student--课程内页-固定分组3.png)
     见 9
-12. 查看分数
+13. 查看分数
     ![Student--课程内页-查看分数](images/Student--课程内页-查看分数.png)
     * `window.onload`：  
         `GET /course/{courseId}/grade`  
@@ -1328,7 +1272,7 @@
         }
         ```
         响应数据：HTTP 204  
-18. ChooseSchool5-6/ChooseSchoolNoSchoolForTeacher1-4  
+18. ChooseSchoolNoSchoolForTeacher1-2  
     ![ChooseSchoolNoSchoolForTeacher2](images/ChooseSchoolNoSchoolForTeacher2.png)  
     * 查询获取：`GET /school?nameBeginWith=厦门`  
         请求数据：无  
