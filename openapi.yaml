@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: |
     厦门大学 *2017~18上* **面向对象分析与设计** 课堂管理系统 `RESTful API` 标准
-  version: "1.0.0-beta.2.1"
+  version: "1.0.0-beta.3"
   title: 课堂管理系统
   contact:
     url: 'https://github.com/Librazy/ControllerWorkingGroup-Public'
@@ -71,14 +71,6 @@ paths:
             schema:
                 allOf:
                 - $ref: '#/components/schemas/User'
-                - required:
-                  - type
-                  - name
-                  - number
-                  - email
-                  - gender
-                  - title
-                  - avatar
                 example: {"name": "张三", "number": "23320152202333", "email": "23320152202333@stu.xmu.edu.cn", "gender": "female", "title": "", "avatar": "/avatar/3486.png"}
       responses:
         '204':
@@ -128,7 +120,6 @@ paths:
                 - required:
                   - id
                   - type
-                  - name
                   - jwt
                 - properties:
                     jwt: 
@@ -235,22 +226,17 @@ paths:
                       format: password
                       description: Json Web Token，用于维护用户登录状态，接收后小程序使用 `wx.setStorage` 存储
                   example: {"id": 3486, "type": "unbinded", "name": "", "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaWQiOiJPQTAwMDEiLCJpYXQiOjE0ODI2NTcyODQyMjF9.TeJpy936w610Vrrm+c3+RXouCA9k1AX0Bk8qURkYkdo="}
-  '/school':
+  '/school?city={city}':
     get:
       tags:
         - school
-      summary: 获取学校列表（按照城市、名称查找学校）
-      description: 两个参数需要依次指定，按名称开头查询必须给出城市
+      summary: 获取学校列表（按照城市查找学校）
       operationId: getSchools
       parameters:
       - name: city
         in: query
+        required: true
         description: 学校的城市
-        schema:
-          type: string
-      - name: nameBeginWith
-        in: query
-        description: 学校的名称开头
         schema:
           type: string
       responses:
@@ -275,6 +261,7 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/school':
     post:
       tags:
         - school
@@ -310,6 +297,49 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/school/province':
+    get:
+      tags:
+        - school
+      summary: 获取省份列表
+      operationId: getProvinces
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
+                example: ["北京", "天津", "河北省", "……", "澳门特别行政区"]
+  '/school/city?province={province}':
+    get:
+      tags:
+        - school
+      summary: 获取城市列表
+      operationId: getCities
+      parameters:
+      - name: province
+        in: query
+        required: true
+        description: 省份
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
+                example: ["北京", "天津", "河北省", "……", "澳门特别行政区"]
+        '404':
+          description: 找不到这个省份
   '/course':
     get:
       tags:
@@ -357,7 +387,7 @@ paths:
                 - proportions
                 - startTime
                 - endTime
-              example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-31", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+              example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-31", "proportions": {"report": 50, "presentation": 50, "c": 20, "b": 60, "a": 20 }}
       responses:
         '201':
           description: 创建成功，返回课程的ID
@@ -397,12 +427,14 @@ paths:
             application/json:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/Course'
+                - $ref: '#/components/schemas/CourseDetail'
                 - required:
                   - id
                   - name
                   - description
-                example: {"id": 23, "name": "OOAD", "description": "面向对象分析与设计"}
+                  - teacherName
+                  - teacherEmail
+                example: {"id": 23, "name": "OOAD", "description": "面向对象分析与设计", "teacherName": "邱明", "teacherEmail": "mingqiu@xmu.edu.cn"}
         '400':
           description: 错误的ID格式
         '404':
@@ -432,7 +464,7 @@ paths:
             schema:
               allOf:
               - $ref: '#/components/schemas/Course'
-              - example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-1", "proportions": {"report": 70, "presentation": 30, "3": 20, "4": 60, "5": 20 }}
+              - example: {"name": "OOAD", "description": "面向对象分析与设计", "startTime": "2017-09-20", "endTime": "2018-1-1", "proportions": {"report": 70, "presentation": 30, "c": 20, "b": 60, "a": 20 }}
       responses:
         '204':
           description: 修改成功
@@ -533,7 +565,7 @@ paths:
                 - site
                 - time
                 - proportions
-              example: {"name": "周三1-2节", "site": "海韵212","time": [{ "week": 1, "day": 1, "time": [1,2]}, {"week": 0, "day": 3, "time": [3,4]}], "proportions": {"report": 50, "presentation": 50, "3": 10, "4": 60, "5": 30 }}
+              example: {"name": "周三1-2节", "site": "海韵212", "time": "周三一二节", "proportions": {"report": 50, "presentation": 50, "c": 10, "b": 60, "a": 30 }}
       responses:
         '201':
           description: 成功
@@ -566,37 +598,30 @@ paths:
         description: 课程名称
         schema:
           type: string
-      - name: teacherName
+      - name: courseTeacher
         in: query
         description: 教师名称
         schema:
           type: string
       responses:
         '200':
-          description: 嵌入了课程信息的班级列表
+          description: 课程班级列表
           content:
             application/json:
               schema:
                 type: array
                 items:
                   allOf:
-                  - $ref: '#/components/schemas/Class'
+                  - $ref: '#/components/schemas/CourseClass'
                   - required:
                     - id
                     - name
+                    - time
                     - site
-                    - course
-                  - properties:
-                      course:
-                        allOf:
-                        - $ref: '#/components/schemas/Course'
-                        - required:
-                          - id
-                          - name
-                          - numStudent
-                          - lessonsPerWeek
-                example: [{"id": 23, "name": "周三1-2节", "site": "公寓405", "course": {"id": 2,
-                        "name": "OOAD", "lessonsPerWeek": 6}},{"id": 42, "name": "一班", "site": "海韵202", "course": {"id": 5, "name": ".Net 平台开发", "lessonsPerWeek": 2}}]
+                    - numStudent
+                    - courseName
+                    - courseTeacher
+                example: [{"id": 23, "name": "周三1-2节", "numStudent": 60, "time": "周三1-2、周五1-2", "site": "公寓405", "courseName": "OOAD", "courseTeacher": "邱明"},{"id": 42, "name": "一班", "numStudent": 60, "time": "周三34节 周五12节", "site": "海韵202", "courseName": ".Net 平台开发", "courseTeacher": "杨律青"}]
       security:
         - http_pwd: []
         - mp_code: []
@@ -629,18 +654,11 @@ paths:
                   - name
                   - numStudent
                   - calling
-                  - timeSite
+                  - time
+                  - site
                   - roster
                   - proportions
                 - properties:
-                    timeSite:
-                      allOf:
-                      - $ref: '#/components/schemas/ClassTime'
-                      - required:
-                        - week
-                        - day
-                        - lesson
-                        - site
                     proportions:
                       required:
                       - '3'
@@ -648,7 +666,7 @@ paths:
                       - '5'
                       - report
                       - presentation
-                example: {"id": 23, "name": "周三1-2节", "numStudent": 120, "time": [{"week": 1, "day": 1, "lessons": [1,2], "site": "海韵201"}, {"week": 0, "day": 3, "lessons": [3,4], "site": "公寓405"}], "calling": true, "roster": "/roster/周三12班.xlsx", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+                example: {"id": 23, "name": "周三1-2节", "numStudent": 120, "time": "周三一二节", "site": "海韵201", "calling": -1, "roster": "/roster/周三12班.xlsx", "proportions": {"report": 50, "presentation": 50, "c": 20, "b": 60, "a": 20 }}
         '400':
           description: 错误的ID格式
         '404':
@@ -687,22 +705,14 @@ paths:
                 - roster
                 - proportions
               - properties:
-                  timeSite:
-                    allOf:
-                    - $ref: '#/components/schemas/ClassTime'
-                    - required:
-                      - week
-                      - day
-                      - lesson
-                      - site
                   proportions:
                     required:
-                    - '3'
-                    - '4'
-                    - '5'
+                    - C
+                    - B
+                    - A
                     - report
                     - presentation
-                example: {"name": "周三1-2节", "numStudent": 120, "time": [{"week": 1, "day": 1, "lessons": [1,2], "site": "海韵201"}, {"week": 0, "day": 3, "lessons": [3,4], "site": "公寓405"}], "calling": true, "roster": "/roster/周三12班.xlsx", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+                example: {"name": "周三1-2节", "numStudent": 120, "time":"周三12节 周一34节", "site": "海韵201，公寓405", "calling": -1, "roster": "/roster/周三12班.xlsx", "proportions": {"report": 50, "presentation": 50, "c": 20, "b": 60, "a": 20 }}
       responses:
         '204':
           description: 成功
@@ -778,15 +788,10 @@ paths:
                 uniqueItems: true
                 items:
                   allOf:
-                  - $ref: '#/components/schemas/User'
+                  - $ref: '#/components/schemas/Student'
                   - required:
                     - id
                     - name
-                  - properties:
-                      type:
-                        type: string
-                        enum: 
-                        - student
                 example: [{"id": 233, "name": "张三", "number": 24320152202333}, {"id": 245, "name": "张八", "number": 24320152202334}]
         '400':
           description: 错误的ID格式
@@ -816,15 +821,9 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/User'
+              - $ref: '#/components/schemas/Student'
               - required:
                 - id
-              - properties:
-                  type:
-                    type: string
-                    enum: 
-                    - student
-                    description: 学生
               example: {"id": 233}
       responses:
         '201':
@@ -883,157 +882,11 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
-  '/class/{classId}/attendance':
-    get:
-      tags:
-        - class
-      summary: 按ID获取班级签到状态
-      operationId: getAttendanceByClassId
-      parameters:
-      - name: classId
-        in: path
-        description: 签到状态所属班级的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: showPresent
-        in: query
-        description: 是否包括已签到名单
-        required: true
-        schema:
-          type: boolean
-      - name: showLate
-        in: query
-        description: 是否包括迟到签到名单
-        required: true
-        schema:
-          type: boolean
-      - name: showAbsent
-        in: query
-        description: 是否包括缺勤名单
-        required: true
-        schema:
-          type: boolean
-      responses:
-        '200':
-          description: 签到状态
-          content:
-            application/json:
-              schema:
-                properties: 
-                  numPresent:
-                    type: integer
-                  present:
-                    type: array
-                    uniqueItems: true
-                    items: 
-                      allOf:
-                      - $ref: '#/components/schemas/User'
-                      - required:
-                        - id
-                        - name
-                      - properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
-                  late:
-                    type: array
-                    uniqueItems: true
-                    items: 
-                      allOf:
-                      - $ref: '#/components/schemas/User'
-                      - required:
-                        - id
-                        - name
-                        properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
-                  absent:
-                    type: array
-                    uniqueItems: true
-                    items: 
-                      allOf:
-                      - $ref: '#/components/schemas/User'
-                      - required:
-                        - id
-                        - name
-                      - properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
-                required:
-                - numPresent
-                example: {"numPresent": 4, "present": [{"id": 2357, "name": "张三"}, {"id": 8232, "name": "李四"}], "late": [{"id": 3412, "name": "王五"}, {"id": 5234, "name": "王七九"}], "absent": [{"id": 34, "name": "张六"}]}
-        '400':
-          description: 错误的ID格式、在签到结束 `class.calling == true` 前访问迟到、缺勤名单
-        '404':
-          description: 未找到班级
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/class/{classId}/attendance/{studentId}':
-    put:
-      tags:
-        - class
-      summary: 签到(上传位置信息)
-      operationId: updateAttendanceByClassId
-      parameters:
-      - name: classId
-        in: path
-        description: 签到状态所属班级的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: studentId
-        in: path
-        description: 签到状态所属学生的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                longitude:
-                  type: number
-                  example: 118.1132721
-                latitude:
-                  type: number
-                  example: 24.4307197
-                elevation:
-                  type: number
-                  example: 18.42
-              example: {"longitude": 118.1132721, "latitude": 24.4307197, "elevation": 18.42}
-      responses:
-        '204':
-          description: 成功
-        '400':
-          description: 签到失败（位置错误、当前未签到等）
-        '403':
-          description: 学生无法为他人签到（URL中ID与自身ID不同）
-        '404':
-          description: 不存在这个学生或班级
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
   '/class/{classId}/classgroup':
     get:
       tags:
         - class
-      summary: 按ID获取班级小组
+      summary: 按ID获取自身所在班级小组
       operationId: getClassGroupByClassId
       parameters:
       - name: classId
@@ -1057,31 +910,21 @@ paths:
                 - properties:
                     leader:
                       allOf:
-                      - $ref: '#/components/schemas/User'
+                      - $ref: '#/components/schemas/Student'
                       - required:
                         - id
                         - name
                         - number
-                      - properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
                     members:
                       type: array
                       uniqueItems: true
                       items:
                         allOf:
-                        - $ref: '#/components/schemas/User'
+                        - $ref: '#/components/schemas/Student'
                         - required:
                           - id
                           - name
                           - number
-                        - properties:
-                            type:
-                              type: string
-                              enum: 
-                              - student
                   example: {"leader": {"id": 2757, "name": "张三", "number": "23320152202333"}, "members": [{"id": 2756, "name": "李四", "number": "23320152202443"}, {"id": 2777, "name": "王五", "number": "23320152202433"}]}
         '400':
           description: 错误的ID格式
@@ -1092,63 +935,123 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/class/{classId}/classgroup/resign':
     put:
       tags:
-        - class
-      summary: 按ID修改班级小组
-      operationId: updateClassGroupByClassId
-      parameters:
-      - name: classId
-        in: path
-        description: 班级小组所属班级的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
+      - class
+      summary: 班级小组组长辞职
+      operationId: resignClassGroupLeader
       requestBody:
         required: true
+        description: 学生的ID
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/ClassGroup'
+              - $ref: '#/components/schemas/Student'
               - required:
-                - leader
-                - members
-              - properties:
-                  leader:
-                    allOf:
-                    - $ref: '#/components/schemas/User'
-                    - required:
-                      - id
-                    - properties:
-                        type:
-                          type: string
-                          enum: 
-                          - student
-                  members:
-                    type: array
-                    uniqueItems: true
-                    items:
-                      allOf:
-                      - $ref: '#/components/schemas/User'
-                      - required:
-                        - id
-                      - properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
-                example: {"leader": {"id": 5678}, "members": [{"id": 8888}, {"id": 5324}]}
+                - id
+              example: {"id": 247}
       responses:
         '204':
           description: 成功
         '400':
-          description: 错误的ID格式
+          description: 错误的ID格式、辞职的学生不存在
         '403':
-          description: 用户不是组长
+          description: 权限不足（不是该小组的组长）
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/class/{classId}/classgroup/assign':
+    put:
+      tags:
+      - class
+      summary: 成为班级小组组长
+      operationId: assignClassGroupLeader
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、成为组长的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员）
         '409':
-          description: 与其他名单冲突（新增学生已在其他班级分组）
+          description: 已经有组长了
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/class/{classId}/classgroup/add':
+    put:
+      tags:
+      - class
+      summary: 添加班级小组成员
+      operationId: addClassGroupMember
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、待添加的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员）
+        '409':
+          description: 待添加学生已经在小组里了
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/class/{classId}/classgroup/remove':
+    put:
+      tags:
+      - class
+      summary: 移除成员
+      operationId: removeClassGroupMember
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、待移除的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员/组长）
+        '409':
+          description: 待移除学生不在小组里
       security:
         - http_pwd: []
         - mp_code: []
@@ -1158,7 +1061,8 @@ paths:
     get:
       tags:
         - course
-      summary: 按ID获取课程的讨论课
+      summary: 按课程ID获取讨论课详情列表
+      description: 学生可以设置 `?embedGrade=true` 查看分数 `grade`，默认 `embedGrade=false` JSON中则不包含 `grade`
       operationId: getSeminarsByCourseId
       parameters:
       - name: courseId
@@ -1168,6 +1072,11 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: embedGrade
+        in: query
+        description: 是否包含分数（学生小程序需要）
+        schema:
+          type: boolean
       responses:
         '200':
           description: 讨论课的详情列表
@@ -1186,9 +1095,14 @@ paths:
                     - groupingMethod
                     - startTime
                     - endTime
-                example: [{"id": 29, "name": "界面原型设计", "description": "界面原型设计", "groupingMethod": "fixed", "startTime": "2017-09-25", "endTime": "2017-10-09"}, {"id": 32, "name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24"}]
+                  - properties:
+                      grade:
+                        type: integer
+                        minimum: 1
+                        maximum: 5
+                example: [{"id": 29, "name": "界面原型设计", "description": "界面原型设计", "groupingMethod": "fixed", "startTime": "2017-09-25", "endTime": "2017-10-09", "grade": 4}, {"id": 32, "name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24", "grade": 5}]
         '400':
-          description: 错误的ID格式
+          description: 错误的ID格式、教师设置embedGrade为true
         '404':
           description: 未找到课程
       security:
@@ -1223,7 +1137,7 @@ paths:
                 - startTime
                 - endTime
                 - proportions
-              example: {"name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+              example: {"name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24", "proportions": {"report": 50, "presentation": 50, "c": 20, "b": 60, "a": 20 }}
       responses:
         '201':
           description: 成功
@@ -1237,6 +1151,79 @@ paths:
                     example: 32
         '403':
           description: 用户权限不足（学生无法创建）
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/course/{courseId}/seminar/current':
+    get:
+      tags:
+        - course
+      summary: 获取课程正在进行的讨论课
+      operationId: getCurrentSeminarByCourseId
+      parameters:
+      - name: courseId
+        in: path
+        description: 需获取讨论课的课程的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 当前讨论课的详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/SeminarClasses'
+                - required:
+                  - id
+                  - name
+                  - courseName
+                  - groupingMethod
+                  - startTime
+                  - endTime
+                  - classes
+                example: {"id": 29, "name": "界面原型设计", "courseName": "OOAD", "groupingMethod": "fixed", "startTime": "2017-09-25", "endTime": "2017-10-09", "classes": [{"id": 53, "name": "周三12"}, {"id": 57, "name": "周三34"}]}
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 当前没有正在进行的讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/course/{courseId}/grade':
+    get:
+      tags:
+        - course
+      summary: 按课程ID获取学生的所有讨论课成绩
+      operationId: getGradesByCourseId
+      parameters:
+      - name: courseId
+        in: path
+        description: 需获取讨论课成绩的课程的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 当前讨论课的详情
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeminarGradeDetail'
+                example: [{"seminarName": "需求分析", "groupName": "3A2", "leaderName": "张三", "presentationGrade": 3, "reportGrade": 4, "grade": 4}, {"seminarName": "界面原型设计", "groupName": "3A3", "leaderName": "张三", "presentationGrade": 4, "reportGrade": 4, "grade": 4}]
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 当前没有正在进行的讨论课
       security:
         - http_pwd: []
         - mp_code: []
@@ -1271,7 +1258,8 @@ paths:
                   - groupingMethod
                   - startTime
                   - endTime
-                example: {"id": 32, "name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24"}
+                  - topics
+                example: {"id": 32, "name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-10", "endTime": "2017-10-24", , "topics": [{"id": 257, "name": "领域模型与模块"}]}
         '400':
           description: 错误的ID格式
         '404':
@@ -1308,7 +1296,7 @@ paths:
                 - startTime
                 - endTime
                 - proportions
-              example: {"name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-11", "endTime": "2017-10-24", "proportions": {"report": 50, "presentation": 50, "3": 20, "4": 60, "5": 20 }}
+              example: {"name": "概要设计", "description": "模型层与数据库设计", "groupingMethod": "fixed", "startTime": "2017-10-11", "endTime": "2017-10-24", "proportions": {"report": 50, "presentation": 50, "c": 20, "b": 60, "a": 20 }}
       responses:
         '204':
           description: 成功
@@ -1348,6 +1336,88 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/seminar/{seminarId}/my':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取与学生有关的讨论课信息
+      operationId: getStudentSeminarById
+      parameters:
+      - name: seminarId
+        in: path
+        description: 需获取讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 讨论课详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/StudentSeminar'
+                - required:
+                  - id
+                  - name
+                  - courseName
+                  - groupingMethod
+                  - startTime
+                  - endTime
+                  - classCalling
+                  - isLeader
+                  - areTopicsSeletced
+                example: {"id": 32, "name": "概要设计", "groupingMethod": "random", "courseName": "OOAD", "startTime": "2017-10-11", "endTime": "2017-10-24",  "classCalling": 23, "isLeader": true, "areTopicsSeletced": true}
+        '400':
+          description: 错误的ID格式、教师请求本API
+        '404':
+          description: 未找到讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/detail':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取讨论课详情
+      operationId: getSeminarDetailById
+      parameters:
+      - name: seminarId
+        in: path
+        description: 需获取讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 讨论课详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/SeminarDetail'
+                - required:
+                  - id
+                  - name
+                  - site
+                  - startTime
+                  - endTime
+                  - teacherName
+                  - teacherEmail
+                example: {"id": 32, "name": "概要设计", "startTime": "2017-10-10", "endTime": "2017-10-24", "site": "海韵201", "teacherName": "邱明", "teacherEmail": "mingqiu@xmu.edu.cn"}
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
   '/seminar/{seminarId}/topic':
     get:
       tags:
@@ -1375,11 +1445,13 @@ paths:
                   - $ref: '#/components/schemas/Topic'
                   - required:
                     - id
+                    - serial
                     - name
                     - description
                     - groupLimit
+                    - groupMemberLimit
                     - groupLeft
-                example: [{"id": 257, "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5, "groupLeft": 2}]
+                example: [{"id": 257, "serial": "A", "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5, "groupMemberLimit": 6, "groupLeft": 2}]
         '400':
           description: 错误的ID格式
         '404':
@@ -1395,7 +1467,7 @@ paths:
       summary: 在指定ID的讨论课创建话题
       operationId: createTopicBySeminarId
       parameters:
-      - name: topicId
+      - name: seminarId
         in: path
         description: 待创建话题的讨论课的ID
         required: true
@@ -1411,10 +1483,12 @@ paths:
               allOf:
               - $ref: '#/components/schemas/Topic'
               - required:
+                - serial
                 - name
                 - description
                 - groupLimit
-              example: {"name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5}
+                - groupMemberLimit
+              example: {"serial": "A", "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5, "groupMemberLimit": 6}
       responses:
         '201':
           description: 成功
@@ -1428,6 +1502,363 @@ paths:
                   example: {"id": 257}
         '403':
           description: 用户权限不足（无法在他人讨论课创建话题、学生无法创建话题）
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/group':
+    get:
+      tags:
+        - seminar
+      summary: 按讨论课ID查找小组
+      operationId: getGroupBySeminarId
+      parameters:
+      - name: seminarId
+        in: path
+        description: 需获取讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: gradeable
+        in: query
+        description: 仅返回当前用户可打分的小组
+        schema:
+          type: boolean
+      - name: classId
+        in: query
+        description: 仅返回此班级的小组
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 满足条件的小组列表
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/Group'
+                  - required:
+                    - id
+                    - name
+                    - topics
+                example: [{"id": 28, "name": "1A1", "topics": [{"id": 257, "name": "领域模型与模块"}]}, {"id": 29, "name": "1A2", "topics": [{"id": 257, "name": "领域模型与模块"}]}]
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/group/my':
+    get:
+      tags:
+        - seminar
+      summary: 按讨论课ID获取学生所在小组详情
+      operationId: getStudentGroupBySeminarId
+      parameters:
+      - name: seminarId
+        in: path
+        description: 讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 小组详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Group'
+                - required:
+                  - id
+                  - name
+                  - leader
+                  - members
+                  - topics
+                - properties:
+                    leader:
+                      allOf:
+                      - $ref: '#/components/schemas/Student'
+                      - required:
+                        - id
+                        - number
+                        - name
+                    members:
+                      type: array
+                      uniqueItems: true
+                      items:
+                        allOf:
+                        - $ref: '#/components/schemas/Student'
+                        - required:
+                          - id
+                          - number
+                          - name
+                    topics:
+                      type: array
+                      uniqueItems: true
+                      items:
+                        allOf:
+                        - $ref: '#/components/schemas/Topic'
+                        - required:
+                          - id
+                          - name
+                  example: {"id": 28, "name": 28, "leader": {"id": 8888, "name": "张三"}, "members": [{"id": 5324, "name": "李四"}, {"id": 5678, "name": "王五"}], "topics": [{"id": 257, "name": "领域模型与模块"}]}
+        '400':
+          description: 错误的ID格式
+        '403':
+          description: 老师无法使用本API
+        '404':
+          description: 讨论课尚未分组
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/class/{classId}/attendance':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取讨论课班级签到状态
+      operationId: getSeminarClassAttendance
+      parameters:
+      - name: classId
+        in: path
+        description: 签到状态所属班级的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 签到状态
+          content:
+            application/json:
+              schema:
+                properties: 
+                  numPresent:
+                    type: integer
+                  numStudent:
+                    type: integer
+                required:
+                - numPresent
+                example: {"numPresent": 40, "numStudent": 60}
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到班级、讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/class/{classId}/attendance/present':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取讨论课班级已签到名单
+      operationId: getSeminarClassPresent
+      parameters:
+      - name: seminarId
+        in: path
+        description: 签到状态所属讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: classId
+        in: path
+        description: 签到状态所属班级的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 签到状态
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items: 
+                  allOf:
+                  - $ref: '#/components/schemas/Student'
+                  - required:
+                    - id
+                    - name
+                example: [{"id": 2357, "name": "张三"}, {"id": 8232, "name": "李四"}]
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到班级、讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/class/{classId}/attendance/late':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取讨论课班级迟到签到名单
+      operationId: getSeminarClassLate
+      parameters:
+      - name: seminarId
+        in: path
+        description: 签到状态所属讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: classId
+        in: path
+        description: 签到状态所属班级的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 签到状态
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items: 
+                  allOf:
+                  - $ref: '#/components/schemas/Student'
+                  - required:
+                    - id
+                    - name
+                example: [{"id": 3412, "name": "王五"}, {"id": 5234, "name": "王七九"}]
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到班级、讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/class/{classId}/attendance/absent':
+    get:
+      tags:
+        - seminar
+      summary: 按ID获取讨论课班级缺勤名单
+      operationId: getSeminarClassAbsent
+      parameters:
+      - name: seminarId
+        in: path
+        description: 签到状态所属讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: classId
+        in: path
+        description: 签到状态所属班级的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: 签到状态
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items: 
+                  allOf:
+                  - $ref: '#/components/schemas/Student'
+                  - required:
+                    - id
+                    - name
+                example: [{"id": 34, "name": "张六"}]
+        '400':
+          description: 错误的ID格式
+        '404':
+          description: 未找到班级、讨论课
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/seminar/{seminarId}/class/{classId}/attendance/{studentId}':
+    put:
+      tags:
+        - seminar
+      summary: 签到(上传位置信息)
+      operationId: updateAttendance
+      parameters:
+      - name: seminarId
+        in: path
+        description: 签到状态所属讨论课的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: classId
+        in: path
+        description: 签到状态所属班级的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: studentId
+        in: path
+        description: 签到状态所属学生的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                longitude:
+                  type: number
+                  example: 118.1132721
+                latitude:
+                  type: number
+                  example: 24.4307197
+                elevation:
+                  type: number
+                  example: 18.42
+              example: {"longitude": 118.1132721, "latitude": 24.4307197, "elevation": 18.42}
+      responses:
+        '200':
+          description: 签到状态，有ontime准点、late迟到两种
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - ontime
+                    - late
+                example: {"status": "late"}
+        '400':
+          description: 签到失败（位置错误、当前未签到等）
+        '403':
+          description: 学生无法为他人签到（URL中ID与自身ID不同）
+        '404':
+          description: 不存在这个学生或班级、讨论课
       security:
         - http_pwd: []
         - mp_code: []
@@ -1457,11 +1888,13 @@ paths:
                 - $ref: '#/components/schemas/Topic'
                 - required:
                   - id
+                  - serial
                   - name
                   - description
                   - groupLimit
+                  - groupMemberLimit
                   - groupLeft
-                example: {"id": 257, "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5, "groupLeft": 2}
+                example: {"id": 257, "serial": "A", "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 5, "groupMemberLimit": 6, "groupLeft": 2}
         '400':
           description: 错误的ID格式
         '404':
@@ -1494,9 +1927,11 @@ paths:
               - $ref: '#/components/schemas/Topic'
               - required:
                 - name
+                - serial
                 - description
                 - groupLimit
-              example: {"name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 6}
+                - groupMemberLimit
+              example: {"serial": "A", "name": "领域模型与模块", "description": "Domain model与模块划分", "groupLimit": 6, "groupMemberLimit": 6}
       responses:
         '204':
           description: 成功
@@ -1562,60 +1997,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Group'
                 example: [{"id": 23}, {"id": 26}]
-        '400':
-          description: 错误的ID格式
-        '404':
-          description: 未找到讨论课
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/seminar/{seminarId}/group':
-    get:
-      tags:
-        - seminar
-      summary: 按讨论课ID查找小组
-      operationId: getGroupBySeminarId
-      parameters:
-      - name: seminarId
-        in: path
-        description: 需获取讨论课的ID
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: gradeable
-        in: query
-        description: 仅返回当前用户可打分的小组
-        schema:
-          type: boolean
-      - name: classId
-        in: query
-        description: 仅返回此班级的小组
-        schema:
-          type: integer
-          format: int64
-      - name: include
-        in: query
-        description: 仅返回包含此学生的小组
-        schema:
-          type: integer
-          format: int64
-      responses:
-        '200':
-          description: 满足条件的小组列表
-          content:
-            application/json:
-              schema:
-                type: array
-                uniqueItems: true
-                items:
-                  allOf:
-                  - $ref: '#/components/schemas/Group'
-                  - required:
-                    - id
-                example: [{"id": 28}]
         '400':
           description: 错误的ID格式
         '404':
@@ -1710,11 +2091,12 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/group/{groupId}/resign':
     put:
       tags:
-        - group
-      summary: 按小组ID修改小组
-      operationId: updateGroupById
+      - group
+      summary: 组长辞职
+      operationId: resignGroupLeader
       parameters:
       - name: groupId
         in: path
@@ -1725,48 +2107,147 @@ paths:
           format: int64
       requestBody:
         required: true
+        description: 学生的ID
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/ClassGroup'
+              - $ref: '#/components/schemas/Student'
               - required:
-                - leader
-                - members
-              - properties:
-                  leader:
-                    allOf:
-                    - $ref: '#/components/schemas/User'
-                    - required:
-                      - id
-                    - properties:
-                        type:
-                          type: string
-                          enum: 
-                          - student
-                  members:
-                    type: array
-                    uniqueItems: true
-                    items:
-                      allOf:
-                      - $ref: '#/components/schemas/User'
-                      - required:
-                        - id
-                      - properties:
-                          type:
-                            type: string
-                            enum: 
-                            - student
-              example: {"leader": {"id": 5678}, "members": [{"id": 8888}, {"id": 5324}], "report": "/upload/report/54123.pdf"}
+                - id
+              example: {"id": 247}
       responses:
         '204':
           description: 成功
         '400':
-          description: 错误的ID格式、指定了不存在的报告URL等
+          description: 错误的ID格式、辞职的学生不存在
         '403':
           description: 权限不足（不是该小组的组长）
         '404':
-          description: 未找到小组
+          description: 小组不存在
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/assign':
+    put:
+      tags:
+      - group
+      summary: 成为组长
+      operationId: assignGroupLeader
+      parameters:
+      - name: groupId
+        in: path
+        description: 小组的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、成为组长的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员）
+        '404':
+          description: 小组不存在
+        '409':
+          description: 已经有组长了
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/add':
+    put:
+      tags:
+      - group
+      summary: 添加成员
+      operationId: addGroupMember
+      parameters:
+      - name: groupId
+        in: path
+        description: 小组的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、待添加的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员）
+        '404':
+          description: 小组不存在
+        '409':
+          description: 待添加学生已经在小组里了
+      security:
+        - http_pwd: []
+        - mp_code: []
+        - wechat_auth: 
+          - snsapi_login
+  '/group/{groupId}/remove':
+    put:
+      tags:
+      - group
+      summary: 移除成员
+      operationId: removeGroupMember
+      parameters:
+      - name: groupId
+        in: path
+        description: 小组的ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        description: 学生的ID
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Student'
+              - required:
+                - id
+              example: {"id": 247}
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 错误的ID格式、待移除的学生不存在
+        '403':
+          description: 权限不足（不是该小组的成员/组长）
+        '404':
+          description: 小组不存在
+        '409':
+          description: 待移除学生不在小组里
       security:
         - http_pwd: []
         - mp_code: []
@@ -1796,7 +2277,7 @@ paths:
               - $ref: '#/components/schemas/Topic'
               - required:
                 - id
-              example: {"id": 247}
+              example: {"id": 23}
       responses:
         '201':
           description: 成功
@@ -1812,6 +2293,8 @@ paths:
           description: 错误的ID格式或话题已满
         '403':
           description: 权限不足（不是该小组的组长）
+        '404':
+          description: 小组不存在
       security:
         - http_pwd: []
         - mp_code: []
@@ -1884,10 +2367,11 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
+  '/group/{groupId}/grade/report':
     put:
       tags:
         - group
-      summary: 按ID设置小组的成绩
+      summary: 按ID设置小组的报告分
       operationId: finalGradeByGroupId
       parameters:
       - name: groupId
@@ -1902,9 +2386,13 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: '#/components/schemas/SeminarGrade'
-              - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}], "reportGrade": 4}
+              properties:
+                reportGrade:
+                  type: integer
+                  format: char
+                  minimum: 1
+                  maximum: 5
+              example: {"reportGrade": 5}
       responses:
         '204':
           description: 成功
@@ -1919,7 +2407,7 @@ paths:
         - mp_code: []
         - wechat_auth: 
           - snsapi_login
-  '/group/{groupId}/grade/{studentId}':
+  '/group/{groupId}/grade/presentation/{studentId}':
     put:
       tags:
         - group
@@ -1945,9 +2433,20 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: '#/components/schemas/SeminarGrade'
-              - example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}]}
+              properties:
+                presentationGrade:
+                  type: array
+                  items:
+                    properties:
+                      topicId:
+                        type: integer
+                        format: int64
+                      grade:
+                        type: integer
+                        format: char
+                        minimum: 1
+                        maximum: 5
+              example: {"presentationGrade": [{"topicId": 257, "grade": 4}, {"topicId": 258, "grade": 5}]}
       responses:
         '204':
           description: 成功
@@ -1971,14 +2470,12 @@ paths:
       requestBody:
         required: true
         content:
-          'image/jpeg':
-            schema:
-              type: string
-              format: binary
-          'image/png':
-            schema:
-              type: string
-              format: binary
+          'multipart/form-data':
+              schema:
+                properties:
+                  file:
+                    type: string
+                    format: binary
       responses:
         '201':
           description: 服务器上的头像文件URL
@@ -1992,72 +2489,6 @@ paths:
                     example: "/avatar/3486.png"
         '400':
           description: 图片大小不符合要求、图片格式不正确、不是有效的图片
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/upload/classroster':
-    post:
-      tags: 
-      - upload
-      summary: 上传班级学生名单
-      operationId: uploadRoster
-      requestBody:
-        required: true
-        content:
-          'application/vnd.ms-excel':
-            schema:
-              type: string
-              format: binary
-          'text/csv':
-            schema:
-              type: string
-              format: binary
-      responses:
-        '201':
-          description: 服务器上的学生名单文件URL
-          content:
-            application/json:
-              schema:
-                properties: 
-                  url:
-                    type: string
-                    format: url
-                    example: "/roster/周三12班.xlsx"
-        '400':
-          description: 文件大小不符合要求、名单文件格式不正确、不是有效的文件
-      security:
-        - http_pwd: []
-        - mp_code: []
-        - wechat_auth: 
-          - snsapi_login
-  '/upload/report':
-    post:
-      tags: 
-      - upload
-      summary: 上传小组报告
-      operationId: uploadReport
-      requestBody:
-        required: true
-        content:
-          'application/pdf':
-            schema:
-              type: string
-              format: binary
-      responses:
-        '201':
-          description: 服务器上的报告PDF文件URL
-          content:
-            application/json:
-              schema:
-                properties: 
-                  url:
-                    type: string
-                    format: url
-                    example: "/upload/report/124324.pdf"
-        '400':
-          description: PDF大小不符合要求、报告文件格式不正确、不是有效的PDF
       security:
         - http_pwd: []
         - mp_code: []
@@ -2143,34 +2574,22 @@ components:
           type: string
           format: url
       additionalProperties: false
-    ClassTime:
-      type: object
-      properties:
-        week:
-          description: 周次（0：每周，1：单周，2：双周）
-          type: integer
-          format: char
-          enum:
-          - 0
-          - 1
-          - 2
-        day:
-          description: 每周中的日期
-          type: integer
-          format: char
-          minimum: 1
-          maximum: 7
-        lesson:
-          description: 节次
-          type: array
-          uniqueItems: true
-          items:
-            type: integer
-            minimum: 1
-            maximum: 12
-        site:
-          description: 班级的上课地点
-          type: string
+    Student:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          type:
+            type: string
+            enum: 
+            - student
+    Teacher:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          type:
+            type: string
+            enum: 
+            - teacher
     Class: 
       type: object
       properties:
@@ -2185,14 +2604,16 @@ components:
         numStudent:
           description: 班级的人数
           type: integer
-        timeSite:
+        time:
           description: 班级的上课时间 
-          type: array
-          items:
-            $ref: '#/components/schemas/ClassTime'
+          type: string
+        site:
+          description: 班级的上课地点 
+          type: string
         calling:
-          description: 班级是否正在签到
-          type: boolean
+          description: 班级正在签到的讨论课ID, -1 表示当前未签到
+          type: integer
+          format: int64
         roster:
           description: 班级学生名单
           type: string
@@ -2208,18 +2629,43 @@ components:
               type: integer
               minimum: 0
               maximum: 100
-            3: 
+            c: 
               type: integer
               minimum: 0
               maximum: 100
-            4: 
+            b: 
               type: integer
               minimum: 0
               maximum: 100
-            5: 
+            a: 
               type: integer
               minimum: 0
               maximum: 100
+    CourseClass:
+      type: object
+      properties:
+        id:
+          description: 班级的唯一ID
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          description: 班级的名称
+          type: string
+        numStudent:
+          description: 班级的人数
+          type: integer
+        time:
+          description: 班级的上课时间 
+          type: string
+        site:
+          description: 班级的上课地点 
+          type: string
+        courseName:
+          description: 课程的名称
+          type: string
+        courseTeacher:
+          $ref: '#/components/schemas/Teacher'
     Course:
       type: object
       properties:
@@ -2229,13 +2675,7 @@ components:
           format: int64
           readOnly: true
         teacher:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          - properties:
-              type:
-                type: string
-                enum: 
-                - teacher
+          $ref: '#/components/schemas/Teacher'
         name:
           description: 课程的名称
           type: string
@@ -2248,11 +2688,11 @@ components:
           description: 学生数量
           type: integer
         startTime:
-          description: 讨论课开始时间
+          description: 课程开始时间
           type: string
           format: date
         endTime:
-          description: 讨论课结束时间
+          description: 课程结束时间
           type: string
           format: date
         description:
@@ -2269,18 +2709,40 @@ components:
               type: integer
               minimum: 0
               maximum: 100
-            3: 
+            c: 
               type: integer
               minimum: 0
               maximum: 100
-            4: 
+            b: 
               type: integer
               minimum: 0
               maximum: 100
-            5: 
+            a: 
               type: integer
               minimum: 0
               maximum: 100
+      additionalProperties: false
+    CourseDetail:
+      type: object
+      properties:
+        id:
+          description: 课程的唯一ID
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          description: 课程的名称
+          type: string
+        description:
+          description: 课程描述
+          type: string
+        teacherName:
+          description: 课程教师的名称
+          type: string
+        teacherEmail:
+          description: 课程教师的email
+          type: string
+          format: email
       additionalProperties: false
     Seminar:
       type: object
@@ -2297,7 +2759,7 @@ components:
           description: 讨论课描述
           type: string
         groupingMethod:
-          description: 讨论课描述
+          description: 讨论课分组方式
           type: string
           enum:
             - random
@@ -2310,6 +2772,16 @@ components:
           description: 讨论课结束时间
           type: string
           format: date
+        topics:
+          type: array
+          description: 讨论课的话题列表
+          readOnly: true
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Topic'
+            - required:
+              - id
+              - name
         proportions:
           type: object
           properties:
@@ -2321,19 +2793,124 @@ components:
               type: integer
               minimum: 0
               maximum: 100
-            3: 
+            c: 
               type: integer
               minimum: 0
               maximum: 100
-            4: 
+            b: 
               type: integer
               minimum: 0
               maximum: 100
-            5: 
+            a: 
               type: integer
               minimum: 0
               maximum: 100
       additionalProperties: false
+    SeminarDetail:
+      type: object
+      properties:
+        id:
+          description: 讨论课的唯一ID
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          description: 讨论课的名称
+          type: string
+        site:
+          description: 讨论课班级的地点
+          type: string
+        startTime:
+          description: 讨论课开始时间
+          type: string
+          format: date
+        endTime:
+          description: 讨论课结束时间
+          type: string
+          format: date
+        teacherName:
+          description: 讨论课教师的名称
+          type: string
+        teacherEmail:
+          description: 讨论课教师的email
+          type: string
+          format: email
+      additionalProperties: false
+    SeminarClasses:
+      type: object
+      properties:
+        id:
+          description: 讨论课的唯一ID
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          description: 讨论课的名称
+          type: string
+        courseName:
+          description: 课程的名称
+          type: string
+        startTime:
+          description: 讨论课开始时间
+          type: string
+          format: date
+        endTime:
+          description: 讨论课结束时间
+          type: string
+          format: date
+        classes:
+          description: 课程的班级列表
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: 班级的唯一ID
+                type: integer
+                format: int64
+              name:
+                description: 班级的名称
+                type: integer
+                format: int64
+      additionalProperties: false
+    StudentSeminar:
+      type: object
+      properties:
+        id:
+          description: 讨论课的唯一ID
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          description: 讨论课的名称
+          type: string
+        groupingMethod:
+          description: 讨论课分组方式
+          type: string
+          enum:
+            - random
+            - fixed
+        courseName:
+          description: 课程的名称
+          type: string
+        startTime:
+          description: 讨论课开始时间
+          type: string
+          format: date
+        endTime:
+          description: 讨论课结束时间
+          type: string
+          format: date
+        classCalling:
+          description: 学生所在班级是否正在签到（-1为否，{classId}为是）
+          type: integer
+          format: int64
+        isLeader:
+          description: 学生是否为组长
+          type: boolean
+        areTopicsSeletced:
+          description: 是否完成选题
+          type: boolean
     SeminarGrade:
       type: object
       properties:
@@ -2361,6 +2938,36 @@ components:
         grade:
           description: 最终得分
           type: integer
+          readOnly: true
+          format: char
+          minimum: 1
+          maximum: 5
+      additionalProperties: false
+    SeminarGradeDetail:
+      type: object
+      properties:
+        groupName:
+          description: 小组名称
+          type: string
+        leaderName:
+          description: 组长名称
+          type: string
+        presentationGrade:
+          description: 展示得分
+          type: integer
+          format: char
+          minimum: 1
+          maximum: 5
+        reportGrade:
+          description: 报告得分
+          type: integer
+          format: char
+          minimum: 1
+          maximum: 5
+        grade:
+          description: 最终得分
+          type: integer
+          readOnly: true
           format: char
           minimum: 1
           maximum: 5
@@ -2373,6 +2980,9 @@ components:
           type: integer
           format: int64
           readOnly: true
+        serial:
+          description: 话题的序号
+          type: string
         name:
           description: 话题的名称
           type: string
@@ -2381,6 +2991,9 @@ components:
           type: string
         groupLimit:
           description: 组数限制
+          type: integer
+        groupMemberLimit:
+          description: 小组人数限制
           type: integer
         groupLeft:
           description: 组数剩余
@@ -2418,8 +3031,13 @@ components:
           type: string
           description: 小组的唯一ID
           readOnly: true
+        name:
+          type: string
+          description: 小组的名称
+          readOnly: true
         leader:
           description: 队长
+          readOnly: true
           allOf:
           - $ref: '#/components/schemas/User'
           - properties:
@@ -2430,6 +3048,7 @@ components:
         members:
           description: 队员
           type: array
+          readOnly: true
           uniqueItems: true
           items:
             allOf:
@@ -2453,6 +3072,7 @@ components:
               - name
         report:
           type: string
+          readOnly: true
           description: 小组的报告
           format: url
         grade:
