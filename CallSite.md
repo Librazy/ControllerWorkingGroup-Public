@@ -361,29 +361,29 @@
     ![Teacher--课程内页-创建讨论课](images/Teacher--课程内页-创建讨论课.png)
     * `提交.onclick`：
         `POST /course/{courseId}/seminar`  
-        ![在指定ID的课程创建讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/createSeminarByCourseId)  
+        [在指定ID的课程创建讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/createSeminarByCourseId)  
 10. 课程内页--讨论课1：
 11. 课程内页--讨论课2：  
     ![Teacher--课程内页-讨论课2](images/Teacher--课程内页-讨论课2.png)
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
-       ![按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
+       [按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
         `GET /seminar/{seminarId}/topic`  
-       ![按ID获取讨论课的话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getTopicsBySeminarId)  
+       [按ID获取讨论课的话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getTopicsBySeminarId)  
     * `删除讨论课.onclick`：
         `DELETE /seminar/{seminarId}`  
-       ![按ID删除讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/deleteSeminarById)  
+       [按ID删除讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/deleteSeminarById)  
     * `删除话题.onclick`：
         `DELETE /topic/{topicId}`  
-        ![按ID删除话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/topic/deleteTopicById)  
+        [按ID删除话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/topic/deleteTopicById)  
 12. 课程内页--讨论课2修改：  
     ![Teacher--课程内页-讨论课2修改](images/Teacher--课程内页-讨论课2修改.png)
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
-        ![按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
+        [按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
     * `提交.onclick`：
         `PUT /seminar/{seminarId}`  
-        ![按ID修改讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/updateSeminarById)
+        [按ID修改讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/updateSeminarById)
 13. 课程内页--新讨论课：  
 14. 课程内页--创建话题：  
     ![Teacher--课程内页-创建话题](images/Teacher--课程内页-创建话题.png)
@@ -938,7 +938,7 @@
 9. FixedGroupInfoUI  
     ![FixedGroupInfoUI](images/FixedGroupInfoUI.png)
     * 查看分组:`GET /seminar/{seminarId}/group?classId={classId}`  
-        [按讨论课ID查找小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getGroupBySeminarId)
+        [按讨论课ID查找小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getGroupBySeminarId)  
         对于展开的小组：  
         `GET /group/{groupId}`  
        [按小组ID获取小组详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/getGroupById)  
@@ -1125,7 +1125,7 @@
     ```  
 5. SeminarFixedGroupNoSelection/SeminarRandomGroupNoSelection  
     ![SeminarFixedGroupNoSelection](images/SeminarFixedGroupNoSelection.png)  
-    `GET /seminar/{seminarId}`  
+    `GET /seminar/{seminarId}/my`  
     [按ID获取与学生有关的讨论课信息](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getStudentSeminarById)  
 6. 已完成分组（FixedGroupLeaderUI、FixedGroupMemberUI、FixedGroupNoLeaderUI）  
     ![FixedGroupNoLeaderUI2](images/FixedGroupNoLeaderUI2.png)  
