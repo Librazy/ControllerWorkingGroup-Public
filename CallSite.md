@@ -361,90 +361,29 @@
     ![Teacher--课程内页-创建讨论课](images/Teacher--课程内页-创建讨论课.png)
     * `提交.onclick`：
         `POST /course/{courseId}/seminar`  
-        请求数据：
-        ```javascript
-        {
-            "name": "概要设计",
-            "description": "模型层与数据库设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-10-10",
-            "endTime": "2017-10-24",
-            "proportions": {
-                "3": 20,
-                "4": 60,
-                "5": 20,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```
-        响应数据：HTTP 201
-        ```javascript
-        {"id": 32}
-        ```
+        ![在指定ID的课程创建讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/course/createSeminarByCourseId)  
 10. 课程内页--讨论课1：
 11. 课程内页--讨论课2：  
     ![Teacher--课程内页-讨论课2](images/Teacher--课程内页-讨论课2.png)
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
-        请求数据：无  
-        响应数据：包含讨论课的基本信息
-        ``` javascript
-        {
-            "id": 32,
-            "name": "概要设计",
-            "description": "模型层与数据库设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-10-10",
-            "endTime": "2017-10-24"
-        }
-        ```  
+       ![按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
         `GET /seminar/{seminarId}/topic`  
-        请求数据：无  
-        响应数据：包含讨论课的基本信息
-        ``` javascript
-        [
-            {
-                "id": 257,
-                "name": "Domain model与模块划分",
-                "description": "XXXXX",
-                "groupLimit": 5,
-                "groupLeft": 2
-            }
-        ]
-        ```  
+       ![按ID获取讨论课的话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getTopicsBySeminarId)  
     * `删除讨论课.onclick`：
         `DELETE /seminar/{seminarId}`  
-        请求数据：无  
-        响应：HTTP 204
+       ![按ID删除讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/deleteSeminarById)  
     * `删除话题.onclick`：
         `DELETE /topic/{topicId}`  
-        请求数据：无  
-        响应：HTTP 204
+        ![按ID删除话题](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/topic/deleteTopicById)  
 12. 课程内页--讨论课2修改：  
     ![Teacher--课程内页-讨论课2修改](images/Teacher--课程内页-讨论课2修改.png)
     * `window.onload`：  
         `GET /seminar/{seminarId}`  
+        ![按ID获取讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarById)  
     * `提交.onclick`：
         `PUT /seminar/{seminarId}`  
-        请求数据：包含待修改信息的JSON或表单  
-        ``` javascript
-        {
-            "name": "概要设计",
-            "description": "模型层与数据库设计",
-            "groupingMethod": "fixed",
-            "startTime": "2017-10-11",
-            "endTime": "2017-10-24",
-            "proportions": {
-                "3": 20,
-                "4": 60,
-                "5": 20,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```  
-        响应：HTTP 204
+        ![按ID修改讨论课](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/updateSeminarById)
 13. 课程内页--新讨论课：  
 14. 课程内页--创建话题：  
     ![Teacher--课程内页-创建话题](images/Teacher--课程内页-创建话题.png)
