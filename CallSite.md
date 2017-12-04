@@ -998,94 +998,19 @@
     ```  
 9. FixedGroupInfoUI  
     ![FixedGroupInfoUI](images/FixedGroupInfoUI.png)
-    * 查看分组:`GET /seminar/{seminar}/group?classId={classId}`  
+    * 查看分组:`GET /seminar/{seminarId}/group?classId={classId}`  
         [按讨论课ID查找小组](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getGroupBySeminarId)
         对于展开的小组：  
         `GET /group/{groupId}`  
-        请求数据:无  
-        响应数据:  
-        ``` javascript
-        {
-            "id": 28,
-            "leader": {
-                "id": 8888,
-                "name": "张三"
-            },
-            "members": [
-                {
-                "id": 5324,
-                "name": "李四"
-                },
-                {
-                "id": 5678,
-                "name": "王五"
-                }
-            ],
-            "topics": [
-                {
-                "id": 257,
-                "name": "领域模型与模块"
-                }
-            ],
-            "report": ""
-        }
-        ```
+       [按小组ID获取小组详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/getGroupById)  
 10. GroupInfoUI:  
     ![GroupInfoUI](images/GroupInfoUI.png)
     * 查看分组同上
     * 查看迟到签到学生  
-        `GET /class/{classId}/attandance?showLate=true`  
-         请求数据：无  
-         响应数据:包含迟到的学生  
-        ``` javascript
-        {
-            "numPresent": 4,
-            "present": [
-                {
-                "id": 2357,
-                "name": "张三"
-                },
-                {
-                "id": 8232,
-                "name": "李四"
-                }
-            ],
-            "late": [
-                {
-                "id": 3412,
-                "name": "王五"
-                },
-                {
-                "id": 5234,
-                "name": "王七九"
-                }
-            ],
-            "absent": [
-                {
-                "id": 34,
-                "name": "张六"
-                }
-            ]
-        }
-        ```
+        `GET /seminar/{seminarId}/class/{classId}/attandance/late`  
+         [按ID获取讨论课班级迟到签到名单](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/seminar/getSeminarClassLate)  
     * 点击+号：`PUT /group/{groupId}`  
-        请求数据:  
-        ``` javascript
-        {
-            "leader": {
-                "id": 5678
-            },
-            "members": [
-                {
-                "id": 8888
-                },
-                {
-                "id": 5324
-                }
-            ]
-        }
-        ```
-         响应数据:HTTP 204  
+       [添加成员](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-beta.3#/group/addGroupMember)
 11. GroupInfoUI2：  
     同上  
 12. RandomRollStartCallUI  
