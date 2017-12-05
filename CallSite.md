@@ -998,7 +998,7 @@
         响应数据：HTTP 204  
 18. ChooseSchoolNoSchoolForTeacher1-2  
     ![ChooseSchoolNoSchoolForTeacher2](images/ChooseSchoolNoSchoolForTeacher2.png)  
-    * 查询获取：`GET /school?nameBeginWith=厦门`  
+    * 查询获取：`GET /school?city=厦门`  
         请求数据：无  
         响应数据：符合查询条件的学校列表
         ``` javascript
