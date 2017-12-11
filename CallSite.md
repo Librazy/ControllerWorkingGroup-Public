@@ -8,22 +8,7 @@
     ![home.html](images/home.html.png)
     * `登录.onclick`：  
         `POST /signin`  
-        请求数据：  
-        ``` javascript
-        {
-            "phone": "18911114514",
-            "password": "qwer2345!"
-        }
-        ```  
-        响应数据：  
-        ``` javascript
-        {
-            "id": 3486,
-            "type": "student",
-            "name": "张三",
-            "jwt":  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaWQiOiJPQTAwMDEiLCJpYXQiOjE0ODI2NTcyODQyMjF9.TeJpy936w610Vrrm+c3+RXouCA9k1AX0Bk8qURkYkdo="
-        }
-        ```  
+        [.Net 手机号密码登录](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/signinPassword)  
 2. register.html
     ![register.html](images/register.html.png)
     * `提交.onclick`：  
@@ -31,332 +16,85 @@
         > 注册分两步：根据手机号密码获取用户ID和登录状态、初始化个人信息
 
         `POST /register`  
-        请求数据：  
-        ``` javascript
-        {
-            "phone": "18911114514",
-            "password": "qwer2345!"
-        }
-        ```  
-        响应数据：  
-        ``` javascript
-        {
-            "id": 3486,
-            "type": "unbinded",
-            "name": "",
-            "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaWQiOiJPQTAwMDEiLCJpYXQiOjE0ODI2NTcyODQyMjF9.TeJpy936w610Vrrm+c3+RXouCA9k1AX0Bk8qURkYkdo="
-        }
-        ```  
+        [
+.Net 手机号密码注册](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/registerPassword)  
         `PUT /me`  
-        请求数据：  
-        ``` javascript
-        {
-            "name": "张三",
-            "type": "student",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "gender": "male",
-            "number": "24320152202333",
-            "email": "xxxxx@xx.com"
-        }
-        ```  
-        响应：HTTP 204
+        [修改当前用户](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/updateCurrentUser)  
 3. wechat.html
     ![wechat.html](images/wechat.html.png)
     * 微信扫码  
         扫码后会跳转到 `/signin?state=%STATE%&code=%JSCODE%`
-        > 这里的“老师、学生”单选框并没有作用
+        > 这里的“老师、学生”单选框并没有作用  
 4. bindStudent.html
     ![bindStudent.html](images/bindStudent.html.png)
     * `提交.onclick`：  
         `PUT /me`  
-        请求数据：  
-        ``` javascript
-        {
-            "name": "张三",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "gender": "male",
-            "number": "24320152202333",
-            "email": "xxxxx@xx.com"
-        }
-        ```  
-        响应：HTTP 204
+        [修改当前用户](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/updateCurrentUser)  
 5. bindTeacher.html
     ![bindTeacher.html](images/bindTeacher.html.png)
     * `提交.onclick`：  
         `PUT /me`  
-        请求数据：  
-        ``` javascript
-        {
-            "name": "张三",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "gender": "male",
-            "number": "24320152202333",
-            "email": "xxxxx@xx.com"
-        }
-        ```  
-        响应：HTTP 204
+
 ### Web Teacher
 
 1. Teacher--基本信息：  
     ![Teacher-基本信息](images/Teacher-基本信息.png)
     * `window.onload`：  
         `GET /me`  
-        请求数据：无  
-        响应数据：包含教师基本信息的JSON，如  
-        ``` javascript
-        {
-            "id": 3486,
-            "type": "teacher",
-            "name": "XXX",
-            "number": "234546",
-            "phone": "12345678978",
-            "email": "xxxxx@xx.com",
-            "gender": "male",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "title": "教授",
-            "avatar": "/avatar/3486.png"
-        }
-        ```  
+        [获取当前用户](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/getCurrentUser)  
 2. Teacher--基本信息修改
     ![Teacher-基本信息修改](images/Teacher-基本信息修改.png)
     * `window.onload`：  
         `GET /me`
     * `保存.onclick`：  
-        `PATCH /me`  
+        `PUT /me`  
         请求数据：
-        ``` javascript
-        {
-            "name": "XXX",
-            "number": "234546",
-            "phone": "12345678978",
-            "email": "xxxxx@xx.com",
-            "gender": "male",
-            "school": {
-                "id": 32,
-                "name": "厦门大学"
-            },
-            "title": "教授",
-            "avatar": "/avatar/3486.png"
-        }
-        ```  
-        响应：HTTP 204
+        [修改当前用户](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/me/updateCurrentUser)  
 3. Teacher--教师主页（课程信息）
     ![Teacher--教师主页（课程信息）](images/Teacher--教师主页（课程信息）.png)
     * `window.onload`：  
-        `GET /course`
-        请求数据：无  
-        响应数据：包含当前用户相关联的课程列表
-        ``` javascript
-        [
-            {
-                "id": 1,
-                "name": "OOAD",
-                "numClass": 3,
-                "numStudent": 60,
-                "startTime": "2017-9-1",
-                "endTime": "2018-1-1"
-            },
-            {
-                "id": 2,
-                "name": "J2EE",
-                "numClass": 1,
-                "numStudent": 60,
-                "startTime": "2017-9-1",
-                "endTime": "2018-1-1"
-            }
-        ]
-        ```
+        `GET /course`  
+        [获取与当前用户相关联的课程列表](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/getUserCourses)  
     * `删除课程.onclick`：  
-        `DELETE /course/{courseId}`
-        请求数据：无  
-        响应数据：HTTP 204
+        `DELETE /course/{courseId}`  
+        [按ID删除课程](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/deleteCourseById)  
     ![Teacher--教师主页（课程信息）-修改课程](images/Teacher--教师主页（课程信息）-修改课程.png)
     * `修改课程.提交.onclick`：  
-        `PUT /course/{courseId}`
-        请求数据：修改后的课程信息  
-        ``` javascript
-        {
-            "name": "OOAD",
-            "description": "面向对象分析与设计",
-            "startTime": "2017-09-20",
-            "endTime": "2018-1-1",
-            "proportions": {
-                "3": 20,
-                "4": 60,
-                "5": 20,
-                "report": 70,
-                "presentation": 30
-            }
-        }
-        ```
-        响应：HTTP 204
+        `PUT /course/{courseId}`  
+        [修改课程](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/updateCourse)
 4. Teacher--新建课程
-    ![Teacher--新建课程](images/Teacher--新建课程.png)
+    ![Teacher--新建课程](images/Teacher--新建课程.png)  
     * `提交.onclick`：  
-        `POST /course`
-        请求数据：
-        ``` javascript
-        {
-            "name": "OOAD",
-            "description": "面向对象分析与设计",
-            "startTime": "2017-09-20",
-            "endTime": "2018-1-31",
-            "proportions": {
-                "3": 20,
-                "4": 60,
-                "5": 20,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```
-        响应数据：新课程ID
-        ``` javascript
-        {
-            "id": 23
-        }
-        ```
+        `POST /course`  
+        [创建课程](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/createCourse)  
 5. 课程内页--首页：
     ![Teacher--课程内页-首页](images/Teacher--课程内页-首页.png)
     * `window.onload`：  
         `GET /course/{courseId}`  
-        请求数据：无  
-        响应数据：包含该课程的具体信息  
-        ``` javascript
-        {
-            "id": 23,
-            "name": "OOAD",
-            "description": "面向对象的分析和设计"
-        }
-        ```
+        [按ID获取课程](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/getCourseById)  
         `GET /course/{courseId}/class`  
-        请求数据：无  
-        响应数据：包含已创建的班级名称  
-        ``` javascript
-        [
-             {
-               "id": 45,
-                "name": "周三1-2节"
-             },
-             {
-                "id": 48,
-                "name": "周三3-4节"
-             }
-        ]
-        ```
+        [按课程ID获取班级详情列表](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/getClassesByCourseId)  
         `GET /course/{courseId}/seminars`  
-        请求数据：无  
-        响应数据：包含已创建的讨论课名称  
-        ```javascript
-        [
-            {
-                "id": 29,
-                "name": "界面原型设计",
-                "description": "界面原型设计",
-                "groupingMethod": "fixed",
-                "startTime": "2017-09-25",
-                "endTime": "2017-10-09"
-            },
-            {
-                "id": 32,
-                "name": "概要设计",
-                "description": "模型层与数据库设计",
-                "groupingMethod": "fixed",
-                "startTime": "2017-10-10",
-                "endTime": "2017-10-24"
-            }
-        ]
-        ```
+        [按课程ID获取讨论课详情列表](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/getSeminarsByCourseId)
 6. 课程内页--创建班级：
     ![Teacher--课程内页-创建班级](images/Teacher--课程内页-创建班级.png)
     * `window.onload`：  
         `GET /course/{courseId}`  
-        见 5.  
+        [按ID获取课程](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/course/getCourseById)  
         > 加载侧边栏，这里可以用 JavaScript 在 localStorage 内缓存课程信息，免去每次访问的重复请求，以下不再包含对侧边栏课程详情的请求
     * `提交.onclick`：  
-        `POST /upload/classroster`
-        请求数据：学生名单列表文件（ .xlsx 或 .csv ）  
-        响应数据：  
-        ```javascript
-        {
-            "url": "/roster/周三12班.xlsx"
-        }
-        ```
-        `POST /course/{courseId}/class`  
-        请求数据：包含班级的具体信息  
-        ```javascript
-        {
-            "name": "周三1-2节",
-            "site": "海韵212",
-            "time": "周三一二节",
-            "proportions": {
-                "3": 10,
-                "4": 60,
-                "5": 30,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```
-        响应数据：HTTP 201
-        ```javascript
-        {"id": 45}
-        ```
+        `POST /upload/classroster`  
+        > 表单处理
 7. 课程内页--周三1-2节查看：
     ![Teacher--课程内页-周三1-2节查看](images/Teacher--课程内页-周三1-2节查看.png)
     * `window.onload`：  
         `GET /class/{classId}`  
-        请求数据：无  
-        响应数据：包含课程的具体信息
-        ```javascript
-        {
-             "id": 23,
-             "name": "周三1-2节",
-             "numStudent": 120,
-             "time": "周三一二节",
-            "calling": true,
-            "roster": "/roster/周三12班.xlsx",
-            "proportions": {
-                     "3": 20,
-                     "4": 60,
-                     "5": 20,
-                     "report": 50,
-                     "presentation": 50
-             }
-        }
-        ```
+        [按ID获取班级详情](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/class/getClassById)  
 8. 课程内页--周三1-2节修改：
     ![Teacher--课程内页-周三1-2节修改](images/Teacher--课程内页-周三1-2节修改.png)
-    * `提交.onclick`：
+    * `提交.onclick`：  
         `PUT /class/{classId}`  
-        请求数据：  
-        ```javascript
-        {
-            "name": "周三1-2节",
-            "site": "海韵212",
-            "time": "周三 一二节",
-            "proportions": {
-                "3": 10,
-                "4": 60,
-                "5": 30,
-                "report": 50,
-                "presentation": 50
-            }
-        }
-        ```
-        响应：HTTP 204
+        [按ID修改班级](https://app.swaggerhub.com/apis/liqueurlibrazy/classmanagementsystem/1.0.0-rc.1#/class/updateClassById)
 9. 课程内页--创建讨论课：
     ![Teacher--课程内页-创建讨论课](images/Teacher--课程内页-创建讨论课.png)
     * `提交.onclick`：
